@@ -110,7 +110,7 @@ const Demo = () => {
       <ProTable<GithubIssueItem>
         columns={columns}
         actionRef={actionRef}
-        request={async (params = {} as Record<string, any>) =>
+        request={async (params) =>
           request<{
             data: GithubIssueItem[];
           }>('https://proapi.azurewebsites.net/github/issues', {
