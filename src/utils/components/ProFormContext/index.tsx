@@ -36,6 +36,12 @@ export type ProFormInstanceType<T> = {
    * @example validateFieldsReturnFormatValue -> {a:{b:value}}
    */
   validateFieldsReturnFormatValue?: (nameList?: NamePath[]) => Promise<T>;
+  /**
+   *验字段后返回格式化之后的所有数据 即使数据没有被form托管
+   * @param
+   * @returns T
+   */
+  validateFieldsReturnAllFormatValue?: (nameList?: NamePath[]) => Promise<T>;
 };
 
 export const ProFormContext = React.createContext<

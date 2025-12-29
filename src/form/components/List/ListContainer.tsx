@@ -26,6 +26,7 @@ const ProFormListContainer: React.FC<ProFormListItemProps> = (props) => {
     containerStyle,
     onAfterAdd,
     onAfterRemove,
+    copyRowsTransform,
   } = props;
   const { hashId } = useContext(ProProvider);
   const fieldKeyMap = useRef(new Map<string, string>());
@@ -159,6 +160,7 @@ const ProFormListContainer: React.FC<ProFormListItemProps> = (props) => {
           index={index}
           action={wrapperAction}
           count={uuidFields.length}
+          copyRowsTransform={copyRowsTransform}
         >
           {children}
         </ProFormListItem>

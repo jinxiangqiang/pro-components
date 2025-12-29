@@ -1,4 +1,4 @@
-﻿import type { SpinProps, TableProps } from 'antd';
+﻿import type { SpinProps, Table, TableProps } from 'antd';
 import type { SizeType } from 'antd/es/config-provider/SizeContext';
 import type { LabelTooltipType } from 'antd/es/form/FormItemLabel';
 import type { NamePath } from 'antd/es/form/interface';
@@ -453,6 +453,7 @@ export type ProTableProps<DataSource, U, ValueType = 'text'> = {
    * 错误边界自定义
    */
   ErrorBoundary?: React.ComponentClass<any, any> | false;
+  tableRef?: Parameters<typeof Table>[0]['ref'];
 } & Omit<TableProps<DataSource>, 'columns' | 'rowSelection'>;
 
 export type ActionType = ProCoreActionType & {

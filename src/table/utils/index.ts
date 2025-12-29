@@ -80,9 +80,9 @@ export function mergePagination<T>(
 /**
  * 获取用户的 action 信息
  *
- * @param actionRef
- * @param counter
- * @param onCleanSelected
+ * @param ref
+ * @param action
+ * @param props
  */
 export function useActionType<T>(
   ref: React.MutableRefObject<ActionType | undefined>,
@@ -96,8 +96,14 @@ export function useActionType<T>(
     editableUtils: UseEditableUtilType;
     /** 透传给 ActionType 的滚动能力 */
     scrollTo?: ActionType['scrollTo'];
+    /** 获取select信息 */
+    getSelectInfo: () => {
+      selectedRows?: any[];
+      selectedRowKeys?: any[];
+    };
   },
 ) {
+  const selectedInfo = props.getSelectInfo();
   /** 这里生成action的映射，保证 action 总是使用的最新 只需要渲染一次即可 */
   const userAction: ActionType = {
     ...props.editableUtils,
@@ -131,6 +137,11 @@ export function useActionType<T>(
     setPageInfo: (rest) => action.setPageInfo(rest),
     // 透出 scrollTo（如上层提供）
     scrollTo: props.scrollTo,
+    selectedInfo: {
+      selectedRowKeys: selectedInfo.selectedRowKeys,
+      selectedRows: selectedInfo.selectedRows,
+    },
+    currentTableDataSource: action.dataSource,
   };
   // eslint-disable-next-line no-param-reassign
   ref.current = userAction;

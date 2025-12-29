@@ -301,6 +301,8 @@ export type ProFormListItemProps = ProFromListCommonProps & {
 
   /** 是否只读模式 */
   readonly: boolean;
+
+  copyRowsTransform?: (row: Record<string, any>) => void;
 };
 
 const ProFormListItem: React.FC<
@@ -313,6 +315,7 @@ const ProFormListItem: React.FC<
     creatorButtonProps,
     deleteIconProps,
     copyIconProps,
+    copyRowsTransform,
     arrowSort,
     upIconProps,
     downIconProps,
@@ -424,7 +427,10 @@ const ProFormListItem: React.FC<
                   .filter((item) => item !== undefined)
                   .flat(1),
               );
-              await action.add(row, count);
+              const transformedRow = copyRowsTransform
+                ? copyRowsTransform(row)
+                : row;
+              await action.add(transformedRow, count);
               setLoadingCopy(false);
             }}
           />

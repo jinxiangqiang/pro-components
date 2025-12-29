@@ -23,6 +23,7 @@ import React, {
   useRef,
 } from 'react';
 import type { ActionType } from '.';
+import { ProTableContext } from './Store/ProTableContext';
 import ProCard from '../card';
 import ValueTypeToComponent from '../field/ValueTypeToComponent';
 import ProForm, { GridContext } from '../form';
@@ -545,7 +546,7 @@ function TableRender<T extends Record<string, any>, U, ValueType>(
     onFilterChange: (filter: Record<string, FilterValue>) => void;
     editableUtils: any;
     getRowKey: GetRowKey<any>;
-    tableRef: React.MutableRefObject<any>;
+    tableRef: Parameters<typeof Table>[0]['ref'];
   },
 ) {
   const {
@@ -668,7 +669,7 @@ function TableRender<T extends Record<string, any>, U, ValueType>(
         rowProps: undefined,
       }}
     >
-      <Table<T> {...getTableProps()} rowKey={rowKey} ref={tableRef as any} />
+      <Table<T> {...getTableProps()} rowKey={rowKey} ref={tableRef} />
     </GridContext.Provider>
   );
 
@@ -703,7 +704,9 @@ function TableRender<T extends Record<string, any>, U, ValueType>(
   });
 
   const propsCardPropsObject =
-    propsCardProps && typeof propsCardProps === 'object' ? propsCardProps : undefined;
+    propsCardProps && typeof propsCardProps === 'object'
+      ? propsCardProps
+      : undefined;
   const propsCardBodyStyle =
     propsCardPropsObject?.styles?.body || propsCardPropsObject?.bodyStyle;
   const propsCardHeaderStyle =
@@ -827,6 +830,8 @@ const ProTable = <
     tooltip,
     revalidateOnFocus = false,
     searchFormRender,
+
+    tableRef,
     ...rest
   } = props;
   const { wrapSSR, hashId } = useStyle(props.defaultClassName);
@@ -837,6 +842,7 @@ const ProTable = <
   const actionRef = useRef<ActionType>();
   // antd Table 实例 ref（仅用于转发 scrollTo 能力）
   const antTableRef = useRef<any>(null);
+  const insideTableRef = tableRef || antTableRef;
 
   const defaultFormRef = useRef();
   const formRef = propRef || defaultFormRef;
@@ -1079,7 +1085,13 @@ const ProTable = <
       formRef?.current?.resetFields();
     },
     editableUtils,
-    scrollTo: (arg) => (antTableRef as any)?.current?.scrollTo?.(arg),
+    scrollTo: (arg) => (insideTableRef as any)?.current?.scrollTo?.(arg),
+    getSelectInfo() {
+      return {
+        selectedRowKeys,
+        selectedRows,
+      };
+    },
   });
 
   /** 同步 action */
@@ -1260,34 +1272,38 @@ const ProTable = <
     tableAlertRender,
   });
   return wrapSSR(
-    <TableRender
-      {...props}
-      name={isEditorTable}
-      defaultClassName={defaultClassName}
-      size={counter.tableSize}
-      onSizeChange={counter.setTableSize}
-      pagination={pagination}
-      searchNode={searchNode}
-      rowSelection={propsRowSelection ? rowSelection : undefined}
-      className={className}
-      tableColumn={tableColumn}
-      isLightFilter={isLightFilter}
-      action={action}
-      alertDom={alertDom}
-      toolbarDom={toolbarDom}
-      hideToolbar={hideToolbar}
-      onSortChange={(sortConfig) => {
-        if (isEqual(sortConfig, proSort)) return;
-        setProSort(sortConfig ?? {});
-      }}
-      onFilterChange={(filterConfig) => {
-        if (isEqual(filterConfig, proFilter)) return;
-        setProFilter(filterConfig ?? {});
-      }}
-      editableUtils={editableUtils}
-      getRowKey={getRowKey}
-      tableRef={antTableRef}
-    />,
+    <ProTableContext.Provider
+      value={{ selectedRowKeys, selectedRows, action: actionRef, formRef }}
+    >
+      <TableRender
+        {...props}
+        name={isEditorTable}
+        defaultClassName={defaultClassName}
+        size={counter.tableSize}
+        onSizeChange={counter.setTableSize}
+        pagination={pagination}
+        searchNode={searchNode}
+        rowSelection={propsRowSelection ? rowSelection : undefined}
+        className={className}
+        tableColumn={tableColumn}
+        isLightFilter={isLightFilter}
+        action={action}
+        alertDom={alertDom}
+        toolbarDom={toolbarDom}
+        hideToolbar={hideToolbar}
+        onSortChange={(sortConfig) => {
+          if (isEqual(sortConfig, proSort)) return;
+          setProSort(sortConfig ?? {});
+        }}
+        onFilterChange={(filterConfig) => {
+          if (isEqual(filterConfig, proFilter)) return;
+          setProFilter(filterConfig ?? {});
+        }}
+        editableUtils={editableUtils}
+        getRowKey={getRowKey}
+        tableRef={insideTableRef}
+      />
+    </ProTableContext.Provider>,
   );
 };
 

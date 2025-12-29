@@ -387,13 +387,13 @@ function BaseFormComponents<T = Record<string, any>, U = Record<string, any>>(
           nameList,
         );
       },
-      /** 
+      /**
       /**
        *验字段后返回格式化之后的所有数据
        * @param nameList (string|number)[]
        * @param omitNilParam boolean
        * @returns T
-       * 
+       *
        * @example validateFieldsReturnFormatValue -> {a:{b:value}}
        */
       validateFieldsReturnFormatValue: async (
@@ -413,6 +413,15 @@ function BaseFormComponents<T = Record<string, any>, U = Record<string, any>>(
           omitNilParam !== undefined ? omitNilParam : omitNil,
         );
         return transformedKey ? transformedKey : {};
+      },
+      /**
+       *验字段后返回格式化之后的所有数据 即使数据没有被form托管
+       * @param
+       * @returns T
+       */
+      validateFieldsReturnAllFormatValue: async () => {
+        await getFormInstance()?.validateFields();
+        return transformKey(getFormInstance()?.getFieldsValue(true), omitNil);
       },
     }),
     [omitNil, transformKey, getFormInstance],

@@ -12,6 +12,7 @@ import type { DeepPartial, ProTokenType } from './typing/layoutToken';
 import { getLayoutDesignToken } from './typing/layoutToken';
 import type { ProAliasToken } from './useStyle';
 import { merge } from './utils/merge';
+import ValueTypeToComponentMap from '../field/ValueTypeToComponent';
 
 export * from './intl';
 export * from './useStyle';
@@ -210,6 +211,7 @@ const CacheClean = () => {
   return null;
 };
 
+
 /**
  * 用于配置 Pro 的组件,分装之后会简单一些
  * @param props
@@ -346,9 +348,16 @@ const ConfigProviderContainer: React.FC<{
   }, [restConfig.theme, hashId, hashed, isNeedOpenHash()]);
 
   const proConfigContextValue = useMemo(() => {
+    // 合并默认映射和用户自定义映射
+    const mergedValueTypeMap = {
+      ...ValueTypeToComponentMap, // 默认映射作为基础
+      ...props.valueTypeMap, // 用户映射覆盖默认映射
+      ...proProvideValue?.valueTypeMap, // 上层提供者映射也合并进来
+    };
+
     return {
       ...proProvideValue!,
-      valueTypeMap: valueTypeMap || proProvideValue?.valueTypeMap,
+      valueTypeMap: mergedValueTypeMap,
       token: finalToken as any,
       theme: tokenContext.theme as unknown as Theme<any, any>,
       hashed,
