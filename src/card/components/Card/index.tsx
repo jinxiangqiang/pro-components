@@ -1,7 +1,7 @@
 import { RightOutlined } from '@ant-design/icons';
 import { omit, useMergedState } from '@rc-component/util';
 import { ConfigProvider, Tabs } from 'antd';
-import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
+import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint';
 import classNames from 'classnames';
 import React, { useContext } from 'react';
 import { LabelIconTip } from '../../../utils';

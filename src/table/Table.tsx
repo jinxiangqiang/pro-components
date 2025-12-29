@@ -8,7 +8,7 @@ import type {
   GetRowKey,
   SortOrder,
   TableCurrentDataSource,
-} from 'antd/lib/table/interface';
+} from 'antd/es/table/interface';
 import classNames from 'classnames';
 import isEmpty from 'lodash-es/isEmpty';
 import isEqual from 'lodash-es/isEqual';
