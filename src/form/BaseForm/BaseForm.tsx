@@ -1,17 +1,20 @@
-/* eslint-disable react-hooks/exhaustive-deps */ import {
+/* eslint-disable react-hooks/exhaustive-deps */
+import {
   get,
   set as namePathSet,
   omit,
   set,
+  useControlledState,
   warning,
 } from '@rc-component/util';
 import { useUrlSearchParams } from '@umijs/use-params';
 import type { FormInstance, FormItemProps, FormProps } from 'antd';
 import { ConfigProvider, Form, Spin } from 'antd';
-import type { NamePath } from 'antd/es/form/interface';
-import classNames from 'classnames';
+import type { NamePath } from 'antd/lib/form/interface';
+import { clsx } from 'clsx';
 import type dayjs from 'dayjs';
 import React, {
+  useCallback,
   useContext,
   useEffect,
   useImperativeHandle,
@@ -28,14 +31,13 @@ import type {
   SearchTransformKeyFn,
 } from '../../utils';
 import {
-  ProFormContext,
   conversionMomentValue,
   isDeepEqualReact,
   nanoid,
+  ProFormContext,
   runFunction,
   transformKeySubmitValue,
   useFetchData,
-  useMountMergeState,
   usePrevious,
   useRefFunction,
   useStyle,
@@ -51,6 +53,7 @@ import type {
 import { EditOrReadOnlyContext } from './EditOrReadOnlyContext';
 import type { SubmitterProps } from './Submitter';
 import Submitter from './Submitter';
+
 const { noteOnce } = warning;
 
 // Define ProFormInstance and ProFormRef
@@ -677,10 +680,23 @@ export function BaseForm<T = Record<string, any>, U = Record<string, any>>(
     ...propRest
   } = props;
   const formRef = useRef<ProFormRef<any>>({} as any);
-  const [loading, setLoading] = useMountMergeState<boolean>(false, {
-    onChange: onLoadingChange,
-    value: propsLoading,
-  });
+  const [loading, setLoadingInner] = useControlledState<boolean>(
+    false,
+    propsLoading,
+  );
+  const setLoading = useCallback(
+    (updater: boolean | ((prev: boolean) => boolean)) => {
+      setLoadingInner((prev) => {
+        const next =
+          typeof updater === 'function'
+            ? (updater as (p: boolean) => boolean)(prev)
+            : updater;
+        onLoadingChange?.(next);
+        return next;
+      });
+    },
+    [onLoadingChange],
+  );
 
   const [urlSearch, setUrlSearch] = useUrlSearchParams(
     {},
@@ -974,7 +990,7 @@ export function BaseForm<T = Record<string, any>, U = Record<string, any>>(
                   transformKey(values, !!omitNil),
                 );
               }}
-              className={classNames(props.className, prefixCls, hashId)}
+              className={clsx(props.className, prefixCls, hashId)}
               onFinish={onFinish}
             >
               <BaseFormComponents<T, U>

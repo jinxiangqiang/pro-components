@@ -6,13 +6,13 @@ import type {
   TableProps,
 } from 'antd';
 import { ConfigProvider, List } from 'antd';
-import type { AnyObject } from 'antd/es/_util/type';
-import type { PaginationConfig } from 'antd/es/pagination';
-import useLazyKVMap from 'antd/es/table/hooks/useLazyKVMap';
-import usePagination from 'antd/es/table/hooks/usePagination';
-import useSelection from 'antd/es/table/hooks/useSelection';
-import type { GetRowKey, TableRowSelection } from 'antd/es/table/interface';
-import classNames from 'classnames';
+import type { AnyObject } from 'antd/lib/_util/type';
+import type { PaginationConfig } from 'antd/lib/pagination';
+import useLazyKVMap from 'antd/lib/table/hooks/useLazyKVMap';
+import usePagination from 'antd/lib/table/hooks/usePagination';
+import useSelection from 'antd/lib/table/hooks/useSelection';
+import type { GetRowKey, TableRowSelection } from 'antd/lib/table/interface';
+import { clsx } from 'clsx';
 import React, { useContext } from 'react';
 import type { CheckCardProps } from '../card';
 import { ProProvider } from '../provider';
@@ -205,7 +205,7 @@ function ListView<RecordType extends AnyObject>(
   return (
     <List<RecordType>
       {...rest}
-      className={classNames(
+      className={clsx(
         getPrefixCls('pro-list-container', customizePrefixCls),
         hashId,
         rest.className,

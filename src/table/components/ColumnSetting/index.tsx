@@ -10,14 +10,14 @@ import {
   ConfigProvider,
   Popover,
   Space,
+  type TableColumnType,
   Tooltip,
   Tree,
   Typography,
-  type TableColumnType,
 } from 'antd';
-import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-import type { DataNode } from 'antd/es/tree';
-import classNames from 'classnames';
+import type { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import type { DataNode } from 'antd/lib/tree';
+import { clsx } from 'clsx';
 import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import { ProProvider, useIntl } from '../../../provider';
 import { runFunction, useRefFunction } from '../../../utils';
@@ -49,7 +49,7 @@ const ToolTipIcon: React.FC<{
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
-          const config = columnsMap[columnKey] || {};
+          const config = columnsMap?.[columnKey] || {};
           const columnKeyMap = {
             ...columnsMap,
             [columnKey]: { ...config, fixed } as ColumnsState,
@@ -155,7 +155,7 @@ const CheckboxList: React.FC<{
           key,
           [parentConfig?.columnKey, rest.index].filter(Boolean).join('-'),
         );
-        const config = columnsMap[columnKey || 'null'] || { show: true };
+        const config = columnsMap?.[columnKey || 'null'] || { show: true };
         if (config.show !== false && !children) {
           checkedKeys.push(columnKey);
         }
@@ -362,7 +362,7 @@ const GroupCheckboxList: React.FC<{
   const showLeft = leftList && leftList.length > 0;
   return (
     <div
-      className={classNames(`${className}-list`, hashId, {
+      className={clsx(`${className}-list`, hashId, {
         [`${className}-list-group`]: showRight || showLeft,
       })}
     >
@@ -434,10 +434,10 @@ function ColumnSetting<T>(props: ColumnSettingProps<T>) {
         if (columnKey) {
           columnKeyMap[columnKey] = {
             // 子节点 disable 时，不修改节点显示状态
-            show: disable ? columnsMap[columnKey]?.show : show,
+            show: disable ? columnsMap?.[columnKey]?.show : show,
             fixed,
             disable,
-            order: columnsMap[columnKey]?.order,
+            order: columnsMap?.[columnKey]?.order,
           };
         }
         if (children) {

@@ -1,15 +1,15 @@
 import { RightOutlined } from '@ant-design/icons';
-import { omit, useMergedState } from '@rc-component/util';
-import { ConfigProvider, Tabs } from 'antd';
-import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint';
-import classNames from 'classnames';
-import React, { useContext } from 'react';
+import { omit, useControlledState } from '@rc-component/util';
+import { ConfigProvider, Grid, Tabs } from 'antd';
+import { clsx } from 'clsx';
+import React, { useCallback, useContext } from 'react';
 import { LabelIconTip } from '../../../utils';
 import type { Breakpoint, CardProps, Gutter } from '../../typing';
 import Actions from '../Actions';
 import Loading from '../Loading';
-
 import useStyle from './style';
+
+const { useBreakpoint } = Grid;
 
 type ProCardChildType = React.ReactElement<CardProps, any>;
 
@@ -61,10 +61,23 @@ const Card = React.forwardRef((props: CardProps, ref: any) => {
     xxl: false,
   };
 
-  const [collapsed, setCollapsed] = useMergedState<boolean>(defaultCollapsed, {
-    value: controlCollapsed,
-    onChange: onCollapse,
-  });
+  const [collapsed, setCollapsedInner] = useControlledState<boolean>(
+    defaultCollapsed,
+    controlCollapsed,
+  );
+  const setCollapsed = useCallback(
+    (updater: boolean | ((prev: boolean) => boolean)) => {
+      setCollapsedInner((prev) => {
+        const next =
+          typeof updater === 'function'
+            ? (updater as (p: boolean) => boolean)(prev)
+            : updater;
+        onCollapse?.(next);
+        return next;
+      });
+    },
+    [onCollapse],
+  );
 
   // 顺序决定如何进行响应式取值，按最大响应值依次取值，请勿修改。
   const responsiveArray: Breakpoint[] = ['xxl', 'xl', 'lg', 'md', 'sm', 'xs'];
@@ -148,7 +161,7 @@ const Card = React.forwardRef((props: CardProps, ref: any) => {
       const { colSpan } = element.props;
       const { span, colSpanStyle } = getColSpanStyle(colSpan);
 
-      const columnClassName = classNames([`${prefixCls}-col`], hashId, {
+      const columnClassName = clsx([`${prefixCls}-col`], hashId, {
         [`${prefixCls}-split-vertical`]:
           split === 'vertical' && index !== childrenArray.length - 1,
         [`${prefixCls}-split-horizontal`]:
@@ -183,7 +196,7 @@ const Card = React.forwardRef((props: CardProps, ref: any) => {
     return element;
   });
 
-  const cardCls = classNames(`${prefixCls}`, className, hashId, {
+  const cardCls = clsx(`${prefixCls}`, className, hashId, {
     [`${prefixCls}-border`]: variant === 'outlined',
     [`${prefixCls}-box-shadow`]: boxShadow,
     [`${prefixCls}-contain-card`]: containProCard,
@@ -197,7 +210,7 @@ const Card = React.forwardRef((props: CardProps, ref: any) => {
     [`${prefixCls}-checked`]: checked,
   });
 
-  const bodyCls = classNames(`${prefixCls}-body`, hashId, {
+  const bodyCls = clsx(`${prefixCls}-body`, hashId, {
     [`${prefixCls}-body-center`]: layout === 'center',
     [`${prefixCls}-body-direction-column`]:
       split === 'horizontal' || direction === 'column',
@@ -249,7 +262,7 @@ const Card = React.forwardRef((props: CardProps, ref: any) => {
     >
       {(title || extra || collapsibleButton) && (
         <div
-          className={classNames(`${prefixCls}-header`, hashId, {
+          className={clsx(`${prefixCls}-header`, hashId, {
             [`${prefixCls}-header-border`]: headerBordered || type === 'inner',
             [`${prefixCls}-header-collapsible`]: collapsibleButton,
           })}

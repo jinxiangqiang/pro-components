@@ -1,8 +1,8 @@
-import { toArray, useMergedState } from '@rc-component/util';
+import { toArray, useControlledState } from '@rc-component/util';
 import type { FormInstance, StepsProps } from 'antd';
 import { Button, Col, ConfigProvider, Form, Row, Space, Steps } from 'antd';
-import type { FormProviderProps } from 'antd/es/form/context';
-import classNames from 'classnames';
+import type { FormProviderProps } from 'antd/lib/form/context';
+import { clsx } from 'clsx';
 import React, {
   useCallback,
   useContext,
@@ -195,10 +195,20 @@ function StepsForm<T = Record<string, any>>(
   /**
    * 受控的方式来操作表单
    */
-  const [step, setStep] = useMergedState<number>(0, {
-    value: props.current,
-    onChange: props.onCurrentChange,
-  });
+  const [step, setStepInner] = useControlledState<number>(0, props.current);
+  const setStep = useCallback(
+    (updater: number | ((prev: number) => number)) => {
+      setStepInner((prev) => {
+        const next =
+          typeof updater === 'function'
+            ? (updater as (p: number) => number)(prev)
+            : updater;
+        props.onCurrentChange?.(next);
+        return next;
+      });
+    },
+    [props.onCurrentChange],
+  );
 
   const layoutRender = useMemo(() => {
     return StepsLayoutStrategy[stepsProps?.direction || 'horizontal'];
@@ -437,7 +447,7 @@ function StepsForm<T = Record<string, any>>(
         : {};
       return (
         <div
-          className={classNames(`${prefixCls}-step`, hashId, {
+          className={clsx(`${prefixCls}-step`, hashId, {
             [`${prefixCls}-step-active`]: isShow,
           })}
           key={name}
@@ -513,7 +523,7 @@ function StepsForm<T = Record<string, any>>(
   ]);
 
   return wrapSSR(
-    <div className={classNames(prefixCls, hashId)}>
+    <div className={clsx(prefixCls, hashId)}>
       <Form.Provider {...rest}>
         <StepsFormProvide.Provider
           value={{

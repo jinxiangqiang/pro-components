@@ -7,12 +7,13 @@ import {
   ProFormDateTimeRangePicker,
   ProFormDateWeekRangePicker,
   ProFormDateYearRangePicker,
+  ProFormDigitRange,
   ProFormSelect,
   ProFormSlider,
   ProFormText,
   ProFormTimePicker,
 } from '@ant-design/pro-components';
-import { render, waitFor } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
@@ -415,6 +416,39 @@ describe('LightFilter', () => {
     expect(yearLabel).toBe('2022 ~ 2023');
   });
 
+  it(' 🪕 should not format digitRange label as date range', async () => {
+    const { container } = render(
+      <LightFilter
+        initialValues={{
+          digitRange: [12, 34],
+        }}
+      >
+        <ProFormDigitRange
+          name="digitRange"
+          label="数字范围"
+          lightProps={{
+            // Simulate inconsistent casing from user config
+            valueType: 'DigitRange',
+          }}
+        />
+      </LightFilter>,
+    );
+
+    await waitFor(() => {
+      const fieldLabel = container.querySelector('.ant-pro-core-field-label');
+      expect(fieldLabel).toBeTruthy();
+      expect(fieldLabel?.textContent).toContain('数字范围');
+    });
+
+    const fieldLabelText =
+      container.querySelector('.ant-pro-core-field-label')?.textContent || '';
+
+    // If digitRange is mistakenly treated as dateRange, 12/34 would be formatted as timestamps (1970-...)
+    expect(fieldLabelText).not.toContain('1970-');
+    expect(fieldLabelText).toContain('12');
+    expect(fieldLabelText).toContain('34');
+  });
+
   it(' 🪕 should support onFinish callback', async () => {
     const onFinish = vi.fn();
 
@@ -469,5 +503,39 @@ describe('LightFilter', () => {
       '.ant-pro-core-field-dropdown-label',
     );
     expect(dropdownLabel).toBeTruthy();
+  });
+
+  it(' 🪕 should support popoverProps.overlayClassName in collapse mode', async () => {
+    const { container, baseElement } = render(
+      <LightFilter
+        collapse
+        popoverProps={{
+          overlayClassName: 'my-lightfilter-popover',
+        }}
+      >
+        <ProFormText name="name1" label="名称" />
+        <ProFormText name="name2" label="名称2" />
+      </LightFilter>,
+    );
+
+    await waitFor(() => {
+      expect(
+        container.querySelector('.ant-pro-form-light-filter'),
+      ).toBeTruthy();
+    });
+
+    // Before open, overlay shouldn't exist in body
+    expect(baseElement.querySelector('.my-lightfilter-popover')).toBeFalsy();
+
+    const dropdownLabel = container.querySelector(
+      '.ant-pro-core-field-dropdown-label',
+    ) as HTMLElement | null;
+    expect(dropdownLabel).toBeTruthy();
+
+    fireEvent.click(dropdownLabel!);
+
+    await waitFor(() => {
+      expect(baseElement.querySelector('.my-lightfilter-popover')).toBeTruthy();
+    });
   });
 });

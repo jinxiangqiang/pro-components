@@ -1,13 +1,14 @@
-/* eslint-disable no-param-reassign */ import { useMergedState } from '@rc-component/util';
+/* eslint-disable no-param-reassign */
+import RcResizeObserver from '@rc-component/resize-observer';
+import { useControlledState } from '@rc-component/util';
 import type { ColProps, FormItemProps, RowProps } from 'antd';
 import { Col, ConfigProvider, Form, Row } from 'antd';
-import type { FormInstance, FormProps } from 'antd/es/form/Form';
-import classNames from 'classnames';
-import RcResizeObserver from 'rc-resize-observer';
+import type { FormInstance, FormProps } from 'antd/lib/form/Form';
+import { clsx } from 'clsx';
 import type { ReactElement } from 'react';
-import React, { useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { ProProvider, useIntl } from '../../../provider';
-import { isBrowser, useMountMergeState } from '../../../utils';
+import { isBrowser } from '../../../utils';
 import type { CommonFormProps } from '../../BaseForm';
 import { BaseForm } from '../../BaseForm';
 import type { ActionsProps } from './Actions';
@@ -268,12 +269,22 @@ const QueryFilterContent: React.FC<{
   const searchText =
     props.searchText || intl.getMessage('tableForm.search', '搜索');
 
-  const [collapsed, setCollapsed] = useMergedState<boolean>(
+  const [collapsed, setCollapsedInner] = useControlledState<boolean>(
     () => props.defaultCollapsed && !!props.submitter,
-    {
-      value: props.collapsed,
-      onChange: props.onCollapse,
+    props.collapsed,
+  );
+  const setCollapsed = useCallback(
+    (updater: boolean | ((prev: boolean) => boolean)) => {
+      setCollapsedInner((prev) => {
+        const next =
+          typeof updater === 'function'
+            ? (updater as (p: boolean) => boolean)(prev)
+            : updater;
+        props.onCollapse?.(next);
+        return next;
+      });
     },
+    [props.onCollapse],
   );
 
   const {
@@ -461,7 +472,7 @@ const QueryFilterContent: React.FC<{
     <Row
       gutter={searchGutter}
       justify="start"
-      className={classNames(`${baseClassName}-row`, hashId)}
+      className={clsx(`${baseClassName}-row`, hashId)}
       key="resize-observer-row"
     >
       {doms}
@@ -470,7 +481,7 @@ const QueryFilterContent: React.FC<{
           key="submitter"
           span={spanSize.span}
           offset={offset}
-          className={classNames(props.submitterColSpanProps?.className)}
+          className={clsx(props.submitterColSpanProps?.className)}
           {...props.submitterColSpanProps}
           style={{
             textAlign: 'end',
@@ -529,11 +540,8 @@ function QueryFilter<T = Record<string, any>>(props: QueryFilterProps<T>) {
   const baseClassName = context.getPrefixCls('pro-query-filter');
   const { wrapSSR, hashId } = useStyle(baseClassName);
 
-  const [width, setWidth] = useMountMergeState(
-    () =>
-      (typeof style?.width === 'number'
-        ? style?.width
-        : defaultWidth) as number,
+  const [width, setWidth] = useState(() =>
+    typeof style?.width === 'number' ? style?.width : defaultWidth,
   );
 
   const spanSize = useMemo(
@@ -594,7 +602,7 @@ function QueryFilter<T = Record<string, any>>(props: QueryFilterProps<T>) {
             isKeyPressSubmit
             preserve={preserve}
             {...rest}
-            className={classNames(baseClassName, hashId, rest.className)}
+            className={clsx(baseClassName, hashId, rest.className)}
             onReset={onReset}
             style={style}
             layout={spanSize.layout}

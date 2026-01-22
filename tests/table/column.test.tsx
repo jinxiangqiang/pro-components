@@ -240,4 +240,40 @@ describe('Table ColumnSetting', () => {
 
     expect(container).toMatchSnapshot();
   });
+
+  it('🐛 copyable 单元格中文复制不应带尾部空格', async () => {
+    const { container } = render(
+      <ProTable
+        search={false}
+        toolBarRender={false}
+        columns={[
+          {
+            title: '名称',
+            dataIndex: 'name',
+            copyable: true,
+          },
+        ]}
+        dataSource={[
+          {
+            key: '1',
+            name: '中文',
+          },
+        ]}
+        rowKey="key"
+      />,
+    );
+
+    await waitFor(() => {
+      expect(container.querySelector('tbody td')?.textContent).toContain(
+        '中文',
+      );
+    });
+
+    const td = container.querySelector('tbody td')!;
+    const text = td.textContent || '';
+
+    // When selecting/copying the cell text, trailing whitespace should not exist.
+    expect(text).toBe(text.trimEnd());
+    expect(text.endsWith('\u00a0')).toBe(false);
+  });
 });

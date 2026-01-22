@@ -1,6 +1,6 @@
-﻿/* eslint-disable react-hooks/exhaustive-deps */ import {
+/* eslint-disable react-hooks/exhaustive-deps */ import {
   get,
-  useMergedState,
+  useControlledState,
 } from '@rc-component/util';
 import { message } from 'antd';
 import type React from 'react';
@@ -60,24 +60,29 @@ export function useEditableMap<RecordType>(
    * 点击开始编辑之前的保存数据用的
    */
   const preEditRowRef = useRef<RecordType | null>(null);
+  const preEditRowRefs = useRef<Map<string, RecordType | null>>(new Map());
 
   const editableType = props.type || 'single';
 
   // Internationalization
   const intl = useIntl();
 
-  const [editableKeys, setEditableRowKeys] = useMergedState<React.Key[]>([], {
-    value: props.editableKeys,
-    onChange: props.onChange
-      ? (keys) => {
-          props?.onChange?.(
-            // 计算编辑的key
-            keys,
-            props.dataSource,
-          );
-        }
-      : undefined,
-  });
+  const [editableKeys, setEditableRowKeysInner] = useControlledState<
+    React.Key[]
+  >([], props.editableKeys);
+  const setEditableRowKeys = useCallback(
+    (updater: React.Key[] | ((prev: React.Key[]) => React.Key[])) => {
+      setEditableRowKeysInner((prev) => {
+        const next =
+          typeof updater === 'function'
+            ? (updater as (p: React.Key[]) => React.Key[])(prev)
+            : updater;
+        props?.onChange?.(next, props.dataSource);
+        return next;
+      });
+    },
+    [props.onChange, props.dataSource],
+  );
 
   /** 一个用来标志的set 提供了方便的 api 来去重什么的 */
   const editableKeysSet = useMemo(() => {
@@ -155,6 +160,10 @@ export function useEditableMap<RecordType>(
             : [recordKey as string],
         ) ??
         null;
+      preEditRowRefs.current.set(
+        String(recordKeyToString(recordKey)),
+        preEditRowRef.current,
+      );
 
       // 更新编辑 keys（不直接修改 editableKeysSet）
       const newKeys =
@@ -234,6 +243,7 @@ export function useEditableMap<RecordType>(
 
       // 先退出编辑状态
       await cancelEditable(recordKey);
+      preEditRowRefs.current.delete(String(recordKeyToString(recordKey)));
 
       // 更新数据源
       const actionProps = {
@@ -269,6 +279,7 @@ export function useEditableMap<RecordType>(
         saveText,
         cancelText,
         preEditRowRef,
+        preEditRowRefs,
         deleteText,
         deletePopconfirmMessage: `${intl.getMessage(
           'deleteThisLine',
