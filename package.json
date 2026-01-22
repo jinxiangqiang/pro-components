@@ -1,6 +1,6 @@
 {
   "name": "@ant-design/pro-components",
-  "version": "3.1.0-0",
+  "version": "3.1.0-1",
   "type": "module",
   "description": "All-in-one package of @ant-design/pro-components",
   "keywords": [
@@ -51,7 +51,6 @@
     "test:ui": "cross-env TZ=UTC vitest --ui",
     "test:update": "cross-env TZ=UTC  vitest -u",
     "tsc": "tsc --noEmit",
-    "prepublishOnly": "npm run test && npm run build",
     "publish:beta": "npm publish --tag beta",
     "update:deps": "pnpm up --latest"
   },
@@ -207,7 +206,8 @@
   },
   "packageManager": "pnpm@9.6.0",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "http://10.139.43.221:8081/repository/npm-hosted/"
   },
   "authors": [
     "chencheng <sorrycc@gmail.com> (https://github.com/sorrycc)",

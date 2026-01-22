@@ -309,6 +309,11 @@ export type ProTableProps<DataSource, U, ValueType = 'text'> = {
   actionRef?: React.Ref<ActionType | undefined>;
 
   /**
+   * @name table的ref
+   */
+  tableRef?: Parameters<typeof Table>[0]['ref'];
+
+  /**
    * @name 操作自带的 form
    */
   formRef?: TableFormItem<DataSource>['formRef'];
@@ -453,7 +458,6 @@ export type ProTableProps<DataSource, U, ValueType = 'text'> = {
    * 错误边界自定义
    */
   ErrorBoundary?: React.ComponentClass<any, any> | false;
-  tableRef?: Parameters<typeof Table>[0]['ref'];
 } & Omit<TableProps<DataSource>, 'columns' | 'rowSelection'>;
 
 export type ActionType = ProCoreActionType & {
