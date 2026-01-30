@@ -312,10 +312,8 @@ export const useFieldFetchData = (
       ),
     {
       revalidateIfStale: !cacheForSwr,
-      // 打开 cacheForSwr 的时候才应该支持两个功能
       revalidateOnReconnect: cacheForSwr,
       shouldRetryOnError: false,
-      // @todo 这个功能感觉应该搞个API出来
       revalidateOnFocus: false,
     },
   );
@@ -391,7 +389,7 @@ const FieldSelect: ProFieldFC<
     proFieldKey,
     params,
     label,
-    variant,
+    variant: propsVariant,
     id,
     lightLabel,
     labelTrigger,
@@ -406,6 +404,8 @@ const FieldSelect: ProFieldFC<
   useEffect(() => {
     keyWordsRef.current = fieldProps?.searchValue;
   }, [fieldProps?.searchValue]);
+
+  const variant = propsVariant ?? fieldProps?.variant;
 
   const [loading, options, fetchData, resetData] = useFieldFetchData(props);
   const { componentSize } = ConfigProvider?.useConfig?.() || {

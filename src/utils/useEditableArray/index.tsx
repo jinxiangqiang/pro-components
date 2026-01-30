@@ -9,7 +9,6 @@ import type { FormInstance, FormProps } from 'antd';
 import { Form, Popconfirm, message } from 'antd';
 import { AnyObject } from 'antd/es/_util/type';
 import type { NamePath } from 'antd/es/form/interface';
-import useLazyKVMap from 'antd/es/table/hooks/useLazyKVMap';
 import type { GetRowKey } from 'antd/es/table/interface';
 import React, {
   createRef,
@@ -28,6 +27,7 @@ import { ProFormContext } from '../components/ProFormContext';
 import { useDeepCompareEffectDebounce } from '../hooks/useDeepCompareEffect';
 import { usePrevious } from '../hooks/usePrevious';
 import { merge } from '../merge';
+import useLazyKVMap from '../useLazyKVMap';
 const { noteOnce } = rcWarning;
 
 /**
@@ -806,9 +806,11 @@ export function useEditableArray<RecordType extends AnyObject>(
             : updater;
         props?.onChange?.(
           next?.filter((key) => key !== undefined) ?? [],
-          next
+          (next
             ?.map((key) => getRecordByKey(key))
-            .filter((k) => k !== undefined) ?? [],
+            .filter((k): k is RecordType => k !== undefined) ?? []) as
+            | RecordType
+            | RecordType[],
         );
         return next;
       });

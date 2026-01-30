@@ -1,4 +1,4 @@
-﻿import type { GenerateStyle, ProAliasToken } from '../../../provider';
+import type { GenerateStyle, ProAliasToken } from '../../../provider';
 import { useStyle as useAntdStyle } from '../../../provider';
 
 export interface ProToken extends ProAliasToken {
@@ -16,7 +16,8 @@ const genProStyle: GenerateStyle<ProToken> = (token) => {
       paddingInline: 8,
       fontSize: token.fontSize,
       lineHeight: '30px',
-      borderRadius: '2px',
+      borderRadius: token.borderRadius,
+      cornerShape: 'squircle',
       cursor: 'pointer',
       '&:hover': {
         backgroundColor: token.colorBgTextHover,

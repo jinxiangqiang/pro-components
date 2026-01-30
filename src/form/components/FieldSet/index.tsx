@@ -1,4 +1,4 @@
-﻿import { toArray } from '@rc-component/util';
+import { toArray } from '@rc-component/util';
 import type { SpaceProps } from 'antd';
 import { Space } from 'antd';
 import type { GroupProps } from 'antd/es/input';

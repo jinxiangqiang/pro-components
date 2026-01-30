@@ -95,7 +95,7 @@ const LightFilterContainer: React.FC<{
     collapse,
     collapseLabel,
     onValuesChange,
-    variant,
+    variant = 'borderless',
     values,
     footerRender,
     placement,
@@ -184,6 +184,7 @@ const LightFilterContainer: React.FC<{
                 fieldProps: {
                   ...child.props.fieldProps,
                   placement: newPlacement,
+                  variant,
                 },
                 // proFieldProps 会直接作为 ProField 的 props 传递过去
                 proFieldProps: {
@@ -258,6 +259,7 @@ const LightFilterContainer: React.FC<{
                       fieldProps: {
                         ...newFieldProps,
                         placement: newPlacement,
+                        variant,
                       },
                     })}
                   </div>
@@ -313,7 +315,7 @@ function LightFilter<T = Record<string, any>>(props: LightFilterProps<T>) {
               return item;
             })}
             size={size}
-            variant={variant}
+            variant={variant || 'borderless'}
             collapse={collapse}
             collapseLabel={collapseLabel}
             placement={placement}

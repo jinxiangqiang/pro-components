@@ -1,4 +1,4 @@
-﻿import { get } from '@rc-component/util';
+import { get } from '@rc-component/util';
 import { AnyObject } from 'antd/es/_util/type';
 import React from 'react';
 import { isMergeCell } from '.';
@@ -40,11 +40,7 @@ export const renderColumnsTitle = (item: ProColumns<any>) => {
       ? item?.ellipsis
       : item?.ellipsis?.showTitle;
   if (title && typeof title === 'function') {
-    return title(
-      item,
-      'table',
-      <LabelIconTip label={null} tooltip={item.tooltip} />,
-    );
+    return title(item, 'table', null);
   }
   return (
     <LabelIconTip label={title} tooltip={item.tooltip} ellipsis={ellipsis} />

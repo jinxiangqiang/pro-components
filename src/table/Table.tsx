@@ -1081,7 +1081,6 @@ const ProviderTableContainer = <
         ...props,
         columnsState: props.columnsState,
         columns: props.columns,
-        onColumnsStateChange: props.onColumnsStateChange,
         onSizeChange: props.onSizeChange,
         size: props.size,
         defaultSize: props.defaultSize,

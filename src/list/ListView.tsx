@@ -8,15 +8,15 @@ import type {
 import { ConfigProvider, List } from 'antd';
 import type { AnyObject } from 'antd/es/_util/type';
 import type { PaginationConfig } from 'antd/es/pagination';
-import useLazyKVMap from 'antd/es/table/hooks/useLazyKVMap';
-import usePagination from 'antd/es/table/hooks/usePagination';
-import useSelection from 'antd/es/table/hooks/useSelection';
 import type { GetRowKey, TableRowSelection } from 'antd/es/table/interface';
 import { clsx } from 'clsx';
 import React, { useContext } from 'react';
 import type { CheckCardProps } from '../card';
 import { ProProvider } from '../provider';
 import type { ActionType } from '../table';
+import useLazyKVMap from '../utils/useLazyKVMap';
+import usePagination from '../utils/usePagination';
+import useSelection from '../utils/useSelection';
 import { PRO_LIST_KEYS_MAP } from './constants';
 import type { GetComponentProps } from './index';
 import type { ItemProps } from './Item';
@@ -278,6 +278,7 @@ function ListView<RecordType extends AnyObject>(
                             (checkboxDom as JSX.Element)?.props as any
                           )?.onChange({
                             nativeEvent: {},
+                            target: { checked: changeChecked },
                             changeChecked,
                           });
                         }
