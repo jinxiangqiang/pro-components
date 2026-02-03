@@ -581,6 +581,12 @@ const ProTable = <
 
   counter.propsRef.current = props as ProTableProps<any, any, any>;
 
+  const selectedRows = useMemo(
+    () => selectedRowKeys?.map((key) => preserveRecordsRef.current?.get(key)),
+    [action.dataSource, selectedRowKeys],
+  ) as T[];
+
+
   /** 可编辑行的相关配置 */
   const editableUtils = useEditableArray<any>({
     ...props.editable,
@@ -797,10 +803,6 @@ const ProTable = <
     />
   );
 
-  const selectedRows = useMemo(
-    () => selectedRowKeys?.map((key) => preserveRecordsRef.current?.get(key)),
-    [action.dataSource, selectedRowKeys],
-  ) as T[];
 
   const hideToolbar = useMemo(
     () =>
