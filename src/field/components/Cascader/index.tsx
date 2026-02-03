@@ -29,17 +29,7 @@ export type GroupProps = {
  * @param ref
  */
 const FieldCascader: ProFieldFC<GroupProps> = (
-  {
-    radioType,
-    placeholder,
-    formItemRender,
-    mode,
-    render,
-    label,
-    light,
-    variant: propsVariant,
-    ...rest
-  },
+  { placeholder, formItemRender, mode, render, label, light, variant, ...rest },
   ref,
 ) => {
   const { getPrefixCls } = useContext(ConfigProvider.ConfigContext);
@@ -110,11 +100,8 @@ const FieldCascader: ProFieldFC<GroupProps> = (
 
   if (mode === 'edit') {
     const fieldProps = rest.fieldProps || {};
-    const variant = propsVariant ?? fieldProps?.variant;
-
     let dom = (
       <Cascader
-        variant={!light ? variant : 'borderless'}
         ref={cascaderRef}
         open={open}
         suffixIcon={loading ? <LoadingOutlined /> : undefined}

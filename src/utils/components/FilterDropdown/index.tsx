@@ -20,7 +20,6 @@ export type DropdownProps = {
   footerRender?: FooterRender;
   padding?: number;
   disabled?: boolean;
-
   onOpenChange?: (open: boolean) => void;
   open?: boolean;
   placement?: TooltipPlacement;
@@ -102,7 +101,7 @@ const FilterDropdown: React.FC<DropdownProps> = (props) => {
         </div>
       }
     >
-      <span className={`${prefixCls}-label ${hashId}`.trim()}>{label}</span>
+      <span className={clsx(`${prefixCls}-label`, hashId)}>{label}</span>
     </Popover>,
   );
 };

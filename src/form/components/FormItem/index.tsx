@@ -1,4 +1,4 @@
-﻿import { omit } from '@rc-component/util';
+import { omit } from '@rc-component/util';
 import type { FormItemProps } from 'antd';
 import { ConfigProvider, Form } from 'antd';
 import type { NamePath } from 'antd/es/form/interface';
@@ -120,6 +120,10 @@ const WithValueFomFiledProps: React.FC<
 
   if (!React.isValidElement(filedChildren)) return <>{filedChildren}</>;
 
+  // restProps 可能来自 LightWrapper 的 cloneElement（light 模式下传入 variant/fieldProps），需保留以覆盖 filedChildren.props，避免内层控件线框双线
+  const variantFromRest = restProps.variant;
+  const fieldPropsFromRest = restProps.fieldProps;
+
   return React.cloneElement(
     filedChildren,
     omitUndefined({
@@ -127,7 +131,12 @@ const WithValueFomFiledProps: React.FC<
       [valuePropName]: formFieldProps[valuePropName],
       ...filedChildren.props,
       onChange: finalChange,
-      fieldProps,
+      fieldProps: {
+        ...(filedChildren.props as Record<string, any>)?.fieldProps,
+        ...fieldPropsFromRest,
+        ...fieldProps,
+      },
+      ...(variantFromRest !== undefined && { variant: variantFromRest }),
       onBlur: isProFormComponent && !isValidElementForFiledChildren && onBlur,
     }),
   );
@@ -197,35 +206,8 @@ const WarpFormItem: React.FC<
       return (
         <Form.Item
           {...props}
-          //help={typeof help !== 'function' ? help : undefined}
           valuePropName={valuePropName}
           getValueProps={getValuePropsFunc}
-          // @ts-ignore
-          // _internalItemRender={{
-          //   mark: 'pro_table_render',
-          //   render: (
-          //     inputProps: FormItemProps & {
-          //       errors: React.ReactNode[];
-          //       warnings: React.ReactNode[];
-          //     },
-          //     doms: {
-          //       input: JSX.Element;
-          //       errorList: JSX.Element;
-          //       extra: JSX.Element;
-          //     },
-          //   ) => (
-          //     <>
-          //       {doms.input}
-          //       {typeof help === 'function'
-          //         ? help({
-          //             errors: inputProps.errors,
-          //             warnings: inputProps.warnings,
-          //           })
-          //         : doms.errorList}
-          //       {doms.extra}
-          //     </>
-          //   ),
-          // }}
         >
           {children}
         </Form.Item>
@@ -320,6 +302,7 @@ export type ProFormItemProps = FormItemProps & {
   dataFormat?: string;
   lightProps?: LightWrapperProps;
   proFormFieldKey?: any;
+  fieldProps?: Record<string, any>;
 } & WarpFormItemProps;
 
 const ProFormItem: React.FC<ProFormItemProps> = (props) => {
@@ -335,6 +318,7 @@ const ProFormItem: React.FC<ProFormItemProps> = (props) => {
     ignoreFormItem,
     lightProps,
     children: unusedChildren,
+    fieldProps,
     ...rest
   } = props;
   const formListField = useContext(FormListContext);
@@ -400,11 +384,13 @@ const ProFormItem: React.FC<ProFormItemProps> = (props) => {
     </WithValueFomFiledProps>
   );
 
+  const lightPropsForWrapper = omitUndefined(lightProps || {});
+
   const lightDom = noLightFormItem ? (
     children
   ) : (
     <LightWrapper
-      {...lightProps}
+      {...lightPropsForWrapper}
       key={rest.proFormFieldKey || rest.name?.toString()}
       size={size}
     >

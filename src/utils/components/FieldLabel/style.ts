@@ -8,6 +8,7 @@ export interface ProToken extends ProAliasToken {
 const genProStyle: GenerateStyle<ProToken> = (token) => {
   return {
     [token.componentCls]: {
+      boxSizing: 'border-box',
       display: 'inline-flex',
       gap: token.marginXXS,
       alignItems: 'center',
@@ -25,7 +26,6 @@ const genProStyle: GenerateStyle<ProToken> = (token) => {
       '&-active': {
         paddingBlock: 0,
         paddingInline: 8,
-        backgroundColor: token.colorBgTextHover,
         [`&${token.componentCls}-allow-clear:hover:not(${token.componentCls}-disabled)`]:
           {
             [`${token.componentCls}-arrow`]: {
@@ -91,12 +91,39 @@ const genProStyle: GenerateStyle<ProToken> = (token) => {
           fontSize: '6px',
         },
       },
-      '&-bordered': {
+      '&-outlined': {
         height: '32px',
         paddingBlock: 0,
         paddingInline: 8,
         border: `${token.lineWidth}px solid ${token.colorBorder}`,
-        borderRadius: '@border-radius-base',
+        borderRadius: token.borderRadius,
+        '&-active': {
+          backgroundColor: 'none',
+        },
+      },
+      '&-borderless': {
+        height: '32px',
+        '&-active': {
+          backgroundColor: token.colorBgTextHover,
+        },
+      },
+      '&-filled': {
+        height: '32px',
+        backgroundColor: token.colorBgTextHover,
+        border: `${token.lineWidth}px solid transparent`,
+        '&:hover': {
+          border: `${token.lineWidth}px solid ${token.colorPrimary}`,
+          backgroundColor: token.colorBgTextHover,
+        },
+      },
+      '&-underlined': {
+        height: '32px',
+        borderRadius: 0,
+        borderBottom: `${token.lineWidth}px solid ${token.colorSplit}`,
+        '&:hover': {
+          borderBottom: `${token.lineWidth}px solid ${token.colorPrimary}`,
+          backgroundColor: token.colorBgTextHover,
+        },
       },
       '&-bordered&-small': {
         height: '24px',
