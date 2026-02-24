@@ -1,5 +1,6 @@
 import { ConfigProvider } from 'antd';
-import type { TooltipPlacement } from 'antd/es/tooltip';
+import type { SizeType as AntdSizeType } from 'antd/lib/config-provider/SizeContext';
+import type { TooltipPlacement } from 'antd/lib/tooltip';
 import { clsx } from 'clsx';
 import React, { useContext, useMemo, useState } from 'react';
 import {
@@ -11,7 +12,7 @@ import {
 import type { LightFilterFooterRender } from '../../typing';
 import { useStyle } from './style';
 
-export type SizeType = 'small' | 'middle' | 'large' | undefined;
+export type SizeType = AntdSizeType;
 
 export type LightWrapperProps = {
   label?: React.ReactNode;
@@ -143,17 +144,17 @@ const LightWrapper: React.ForwardRefRenderFunction<any, LightWrapperProps> = (
         className={clsx(`${prefixCls}-container`, hashId, className)}
         style={style}
       >
-        {React.cloneElement(children as JSX.Element, {
+        {React.cloneElement(children as React.JSX.Element, {
           ...rest,
           [valuePropName!]: tempValue,
           onChange: (e: any) => {
             setTempValue(e?.target ? e.target.value : e);
           },
-          ...(children as JSX.Element).props,
+          ...(children as React.JSX.Element).props,
           // light 模式下由外层 FilterDropdown 统一描边，内层 Select/TreeSelect/DatePicker 等统一使用 borderless，各 Field 组件无需再根据 light 判断
           variant: 'borderless' as const,
           fieldProps: {
-            ...(children as JSX.Element).props?.fieldProps,
+            ...(children as React.JSX.Element).props?.fieldProps,
             variant: 'borderless' as const,
           },
         })}

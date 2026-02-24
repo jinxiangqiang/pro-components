@@ -1,11 +1,9 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ConfigProvider, Tooltip } from 'antd';
-import type {
-  LabelTooltipType,
-  WrapperTooltipProps,
-} from 'antd/es/form/FormItemLabel';
 import { clsx } from 'clsx';
 import React, { useContext } from 'react';
+import type { ProEllipsis } from '../../genCopyable';
+import type { LabelTooltipType, WrapperTooltipProps } from '../../typing';
 import { useStyle } from './style';
 
 /**
@@ -17,7 +15,7 @@ export const LabelIconTip: React.FC<{
   label: React.ReactNode;
   subTitle?: React.ReactNode;
   tooltip?: string | LabelTooltipType;
-  ellipsis?: boolean | { showTitle?: boolean };
+  ellipsis?: ProEllipsis;
 }> = React.memo((props) => {
   const { label, tooltip, ellipsis, subTitle } = props;
   const { getPrefixCls } = useContext(ConfigProvider.ConfigContext);
@@ -49,13 +47,11 @@ export const LabelIconTip: React.FC<{
         {label}
       </div>
       {subTitle && (
-        <div className={`${className}-subtitle ${hashId}`.trim()}>
-          {subTitle}
-        </div>
+        <div className={clsx(`${className}-subtitle`, hashId)}>{subTitle}</div>
       )}
       {tooltip && (
         <Tooltip {...tooltipProps}>
-          <span className={`${className}-icon ${hashId}`.trim()}>{icon}</span>
+          <span className={clsx(`${className}-icon`, hashId)}>{icon}</span>
         </Tooltip>
       )}
     </div>,

@@ -8,7 +8,6 @@ import {
   useRefFunction,
 } from '../utils';
 import type {
-  PageInfo,
   RequestData,
   UseFetchDataAction,
   UseFetchProps,
@@ -84,7 +83,10 @@ const useFetchData = <DataSource extends RequestData<any>>(
                 ) => DataSource[] | undefined
               )(prev)
             : updater;
-        options?.onDataSourceChange?.(next);
+        // 使用 queueMicrotask 延迟回调，避免在渲染期间更新其他组件状态
+        queueMicrotask(() => {
+          options?.onDataSourceChange?.(next);
+        });
         return next;
       });
     },
@@ -327,7 +329,6 @@ const useFetchData = <DataSource extends RequestData<any>>(
     return () => {
       clearTimeout(pollingSetTimeRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [polling]);
 
   useEffect(() => {
@@ -370,7 +371,6 @@ const useFetchData = <DataSource extends RequestData<any>>(
       abortFetch();
       fetchListDebounce.run(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageInfo?.current]);
 
   // pageSize 修改后返回第一页
@@ -380,7 +380,6 @@ const useFetchData = <DataSource extends RequestData<any>>(
     }
     abortFetch();
     fetchListDebounce.run(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageInfo?.pageSize]);
 
   /**

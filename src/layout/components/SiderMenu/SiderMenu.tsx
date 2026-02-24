@@ -266,7 +266,7 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (props) => {
           style={{
             width: '100%',
           }}
-          className={`${baseClassName}-menu ${hashId}`.trim()}
+          className={clsx(`${baseClassName}-menu`, hashId)}
         />
       ),
     [baseClassName, hashId, menuContentRender, onOpenChange, props],
@@ -299,38 +299,34 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (props) => {
     return dom;
   }, [avatarProps, baseClassName, collapsed]);
 
-  const actionsDom = useMemo(
-    () => {
-      if (!actionsRender) return null;
-      return (
-        <Space
-          align="center"
-          size={4}
-          orientation={collapsed ? 'vertical' : 'horizontal'}
-          className={clsx([
-            `${baseClassName}-actions-list`,
-            collapsed && `${baseClassName}-actions-list-collapsed`,
-            hashId,
-          ])}
-        >
-          {[actionsRender?.(props as HeaderViewProps)]
-            .flat(1)
-            .map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className={`${baseClassName}-actions-list-item ${hashId}`.trim()}
-                >
-                  {item}
-                </div>
-              );
-            })}
-        </Space>
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [actionsRender, baseClassName, collapsed],
-  );
+  const actionsDom = useMemo(() => {
+    if (!actionsRender) return null;
+    return (
+      <Space
+        align="center"
+        size={4}
+        orientation={collapsed ? 'vertical' : 'horizontal'}
+        className={clsx([
+          `${baseClassName}-actions-list`,
+          collapsed && `${baseClassName}-actions-list-collapsed`,
+          hashId,
+        ])}
+      >
+        {[actionsRender?.(props as HeaderViewProps)]
+          .flat(1)
+          .map((item, index) => {
+            return (
+              <div
+                key={index}
+                className={clsx(`${baseClassName}-actions-list-item`, hashId)}
+              >
+                {item}
+              </div>
+            );
+          })}
+      </Space>
+    );
+  }, [actionsRender, baseClassName, collapsed]);
 
   const appsDom = useMemo(() => {
     return (
@@ -434,10 +430,10 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (props) => {
       </div>
       <SiderContext.Provider value={{}}>
         {links ? (
-          <div className={`${baseClassName}-links ${hashId}`.trim()}>
+          <div className={clsx(`${baseClassName}-links`, hashId)}>
             <Menu
               inlineIndent={16}
-              className={`${baseClassName}-link-menu ${hashId}`.trim()}
+              className={clsx(`${baseClassName}-link-menu`, hashId)}
               selectedKeys={[]}
               openKeys={[]}
               theme={theme}
@@ -495,7 +491,7 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (props) => {
       >
         {hideMenuWhenCollapsedClassName ? (
           <div
-            className={`${baseClassName}-hide-when-collapsed ${hashId}`.trim()}
+            className={clsx(`${baseClassName}-hide-when-collapsed`, hashId)}
             style={{
               height: '100%',
               width: '100%',

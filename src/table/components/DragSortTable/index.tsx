@@ -1,6 +1,7 @@
 import { HolderOutlined } from '@ant-design/icons';
 import { useControlledState } from '@rc-component/util';
 import { ConfigProvider } from 'antd';
+import { clsx } from 'clsx';
 import React, { useCallback, useContext, useMemo } from 'react';
 import type { ParamsType } from '../../../provider';
 import ProTable from '../../Table';
@@ -49,7 +50,10 @@ function DragSortTable<
           typeof updater === 'function'
             ? (updater as (p: T[]) => T[])(prev)
             : updater;
-        onDataSourceChange?.(next);
+        // 使用 queueMicrotask 延迟回调，避免在渲染期间更新其他组件状态
+        queueMicrotask(() => {
+          onDataSourceChange?.(next);
+        });
         return next;
       });
     },
@@ -61,13 +65,16 @@ function DragSortTable<
   // 默认拖拽把手
   const DragHandle = useMemo(() => {
     return (dragHandleProps: any) => {
-      const { rowData, index, className, ...rest } = dragHandleProps;
+      const { rowData: _rowData, index: _index, className, ...rest } =
+        dragHandleProps;
       const defaultDom = (
         <HolderOutlined
           {...rest}
-          className={`${getPrefixCls('pro-table-drag-icon')} ${
-            className || ''
-          } ${hashId || ''}`.trim()}
+          className={clsx(
+            getPrefixCls('pro-table-drag-icon'),
+            className,
+            hashId,
+          )}
         />
       );
 

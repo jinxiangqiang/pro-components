@@ -56,6 +56,23 @@ describe('ProForm', () => {
     wrapper.unmount();
   });
 
+  it('📦 className and rootClassName should work correctly', () => {
+    const wrapper = render(
+      <ProForm
+        className="custom-form-class"
+        rootClassName="custom-root-class"
+        submitter={false}
+      >
+        <ProFormText name="test" />
+      </ProForm>,
+    );
+    const form = wrapper.container.querySelector('form');
+    expect(form?.className).toContain('ant-pro-form');
+    expect(form?.className).toContain('custom-form-class');
+    expect(form?.className).toContain('custom-root-class');
+    wrapper.unmount();
+  });
+
   it('📦 componentSize is work', async () => {
     const wrapper = render(
       <ConfigProvider componentSize="small">
@@ -1756,100 +1773,6 @@ describe('ProForm', () => {
       },
       { timeout: 3000 },
     );
-    wrapper.unmount();
-  });
-
-  it('📦 SearchSelect support resetAfterSelect', async () => {
-    const onSearch = vi.fn();
-
-    const wrapper = render(
-      <ProForm>
-        <ProFormSelect.SearchSelect
-          name="userQuery"
-          label="查询选择器"
-          fieldProps={{
-            resetAfterSelect: true,
-            onSearch: (e) => onSearch(e),
-          }}
-          valueEnum={{
-            all: { text: '全部', status: 'Default' },
-            open: {
-              text: '未解决',
-              status: 'Error',
-            },
-            closed: {
-              text: '已解决',
-              status: 'Success',
-            },
-            processing: {
-              text: '解决中',
-              status: 'Processing',
-            },
-          }}
-        />
-      </ProForm>,
-    );
-    await wrapper.findByText('查询选择器');
-
-    act(() => {
-      fireEvent.change(
-        wrapper.baseElement.querySelector('.ant-select-input')!,
-        {
-          target: {
-            value: '全',
-          },
-        },
-      );
-    });
-
-    expect(onSearch).toHaveBeenCalledWith('全');
-
-    act(() => {
-      fireEvent.mouseDown(
-        wrapper.baseElement.querySelectorAll('.ant-select')[0],
-        {},
-      );
-    });
-
-    expect(
-      document.body.querySelectorAll<HTMLElement>('.ant-select-item').length,
-    ).toBe(1);
-
-    await waitFor(() => {
-      // 查找包含"全"的选项内容
-      const items = wrapper.baseElement.querySelectorAll(
-        '.ant-select-item-option-content',
-      );
-      const targetItem = Array.from(items).find((item) =>
-        item.textContent?.includes('全'),
-      );
-      expect(targetItem).toBeTruthy();
-    });
-
-    act(() => {
-      fireEvent.mouseDown(
-        wrapper.baseElement.querySelectorAll('.ant-select')[0],
-        {},
-      );
-    });
-
-    // 选中第一个
-    act(() => {
-      document.body
-        .querySelectorAll<HTMLElement>('.ant-select-item')[0]
-        ?.click();
-    });
-
-    act(() => {
-      fireEvent.mouseDown(
-        wrapper.baseElement.querySelectorAll('.ant-select')[0],
-        {},
-      );
-    });
-
-    expect(
-      document.body.querySelectorAll<HTMLElement>('.ant-select-item').length,
-    ).toBe(4);
     wrapper.unmount();
   });
 

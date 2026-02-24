@@ -2,8 +2,7 @@ import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { get, toArray } from '@rc-component/util';
 import type { DescriptionsProps, FormInstance, FormProps } from 'antd';
 import { ConfigProvider, Descriptions, Space } from 'antd';
-import type { DescriptionsItemType } from 'antd/es/descriptions';
-import type { LabelTooltipType } from 'antd/es/form/FormItemLabel';
+import type { DescriptionsItemType } from 'antd/lib/descriptions';
 import React, { useContext, useEffect } from 'react';
 import ValueTypeToComponent from '../field/ValueTypeToComponent';
 import ProForm, { ProFormField } from '../form';
@@ -12,6 +11,7 @@ import ProConfigContext, { ProConfigProvider, proTheme } from '../provider';
 import ProSkeleton from '../skeleton';
 import type {
   ProCoreActionType,
+  ProEllipsis,
   ProFieldValueType,
   ProSchema,
   ProSchemaComponentTypes,
@@ -22,6 +22,7 @@ import {
   ErrorBoundary,
   InlineErrorFormItem,
   LabelIconTip,
+  LabelTooltipType,
   genCopyable,
   getFieldPropsOrFormItemProps,
   stringify,
@@ -64,7 +65,7 @@ export type ProDescriptionsItemProps<
     hide?: boolean;
     plain?: boolean;
     copyable?: boolean;
-    ellipsis?: boolean | { showTitle?: boolean };
+    ellipsis?: ProEllipsis;
     mode?: ProFieldFCMode;
     children?: React.ReactNode;
     /**
@@ -317,7 +318,7 @@ const schemaToDescriptionsItem = (
   editableUtils?: UseEditableMapUtilType,
   emptyText?: React.ReactNode,
 ) => {
-  const options: JSX.Element[] = [];
+  const options: React.JSX.Element[] = [];
   // 因为 Descriptions 只是个语法糖，children 是不会执行的，所以需要这里处理一下
   const children = items
     ?.map?.((item, index) => {
@@ -327,14 +328,14 @@ const schemaToDescriptionsItem = (
         };
       }
       const {
-        valueEnum,
-        render,
+        valueEnum: _valueEnum,
+        render: _render,
         renderText,
         mode,
-        plain,
+        plain: _plain,
         dataIndex,
-        request,
-        params,
+        request: _request,
+        params: _params,
         editable,
         ...restItem
       } = item as ProDescriptionsItemProps;
@@ -385,7 +386,7 @@ const schemaToDescriptionsItem = (
           ellipsis={item.ellipsis}
         />
       );
-      const field: DescriptionsItemType | JSX.Element =
+      const field: DescriptionsItemType | React.JSX.Element =
         valueType !== 'option'
           ? ({
               ...restItem,
@@ -443,10 +444,10 @@ const schemaToDescriptionsItem = (
                   )}
                 </Component>
               </Descriptions.Item>
-            ) as JSX.Element);
+            ) as React.JSX.Element);
       // 如果类型是 option 自动放到右上角
       if (valueType === 'option') {
-        options.push(field as JSX.Element);
+        options.push(field as React.JSX.Element);
         return null;
       }
       return field;
@@ -485,7 +486,7 @@ const ProDescriptions = <
     onLoadingChange,
     actionRef,
     onRequestError,
-    emptyText,
+    emptyText: _emptyText,
     ...rest
   } = props;
 

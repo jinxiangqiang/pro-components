@@ -25,8 +25,8 @@ const FormItemProvide = React.createContext<{
 /**
  * 把value扔给 fieldProps，方便给自定义用
  *
- * @param param0
  * @returns
+ * @param formFieldProps
  */
 const WithValueFomFiledProps: React.FC<
   Record<string, any> & {
@@ -131,11 +131,16 @@ const WithValueFomFiledProps: React.FC<
       [valuePropName]: formFieldProps[valuePropName],
       ...filedChildren.props,
       onChange: finalChange,
-      fieldProps: {
-        ...(filedChildren.props as Record<string, any>)?.fieldProps,
-        ...fieldPropsFromRest,
-        ...fieldProps,
-      },
+      // 只有当子组件是 ProFormComponent 时才传递 fieldProps，避免传递给原生 DOM 元素
+      ...(!isProFormComponent && fieldProps
+        ? {
+            fieldProps: {
+              ...(filedChildren.props as Record<string, any>)?.fieldProps,
+              ...fieldPropsFromRest,
+              ...fieldProps,
+            },
+          }
+        : {}),
       ...(variantFromRest !== undefined && { variant: variantFromRest }),
       onBlur: isProFormComponent && !isValidElementForFiledChildren && onBlur,
     }),
@@ -228,9 +233,9 @@ const WarpFormItem: React.FC<
               warnings: React.ReactNode[];
             },
             doms: {
-              input: JSX.Element;
-              errorList: JSX.Element;
-              extra: JSX.Element;
+              input: React.JSX.Element;
+              errorList: React.JSX.Element;
+              extra: React.JSX.Element;
             },
           ) => (
             <>
@@ -266,7 +271,6 @@ const WarpFormItem: React.FC<
         {children}
       </Form.Item>
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addonAfter, addonBefore, children, convertValue?.toString(), props]);
 
   return (
@@ -392,7 +396,7 @@ const ProFormItem: React.FC<ProFormItemProps> = (props) => {
     <LightWrapper
       {...lightPropsForWrapper}
       key={rest.proFormFieldKey || rest.name?.toString()}
-      size={size}
+      size={size as any}
     >
       {children}
     </LightWrapper>

@@ -7,16 +7,33 @@ import { FieldLabel } from '../../../utils';
 import type { ProFieldFC } from '../../PureProField';
 
 /**
- * 评分组件
+ * 开关组件
  *
- * @param
+ * @param text
+ * @param mode
+ * @param render
+ * @param light
+ * @param label
+ * @param formItemRender
+ * @param fieldProps
+ * @param propsVariant
+ * @param ref
  */
 const FieldSwitch: ProFieldFC<{
   text: boolean;
   fieldProps?: SwitchProps;
   variant?: 'outlined' | 'borderless' | 'filled';
 }> = (
-  { text, mode, render, light, label, formItemRender, fieldProps, variant: propsVariant },
+  {
+    text,
+    mode,
+    render,
+    light,
+    label,
+    formItemRender,
+    fieldProps,
+    variant: propsVariant,
+  },
   ref,
 ) => {
   const intl = useIntl();
@@ -27,7 +44,6 @@ const FieldSwitch: ProFieldFC<{
       ? (fieldProps?.checkedChildren ?? intl.getMessage('switch.open', '打开'))
       : (fieldProps?.unCheckedChildren ??
           intl.getMessage('switch.close', '关闭'));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldProps?.checkedChildren, fieldProps?.unCheckedChildren, text]);
 
   if (mode === 'read') {

@@ -134,8 +134,8 @@ export type ProRenderFieldPropsType = {
     | ((
         text: any,
         props: Omit<ProFieldFCRenderProps, 'value' | 'onChange'>,
-        dom: JSX.Element,
-      ) => JSX.Element)
+        dom: React.JSX.Element,
+      ) => React.JSX.Element)
     | undefined;
   /**
    * 一个自定义的编辑渲染器。
@@ -148,8 +148,8 @@ export type ProRenderFieldPropsType = {
     | ((
         text: any,
         props: ProFieldFCRenderProps,
-        dom: JSX.Element,
-      ) => JSX.Element)
+        dom: React.JSX.Element,
+      ) => React.JSX.Element)
     | undefined;
 };
 
@@ -202,7 +202,6 @@ const CacheClean = () => {
       // @ts-ignore
       cache.clear();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return null;
 };
@@ -381,8 +380,6 @@ const ConfigProviderContainer: React.FC<{
         </ProConfigContext.Provider>
       </AntdConfigProvider>
     );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     restConfig,
     themeConfig,

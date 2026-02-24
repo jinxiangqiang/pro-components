@@ -75,7 +75,7 @@ const CheckboxListItem: React.FC<{
   const { hashId } = useContext(ProProvider);
 
   const dom = (
-    <span className={`${className}-list-item-option ${hashId}`.trim()}>
+    <span className={clsx(`${className}-list-item-option`, hashId)}>
       <ToolTipIcon
         columnKey={columnKey}
         fixed="left"
@@ -103,8 +103,8 @@ const CheckboxListItem: React.FC<{
     </span>
   );
   return (
-    <span className={`${className}-list-item ${hashId}`.trim()} key={columnKey}>
-      <div className={`${className}-list-item-title ${hashId}`.trim()}>
+    <span className={clsx(`${className}-list-item`, hashId)} key={columnKey}>
+      <div className={clsx(`${className}-list-item-title`, hashId)}>
         {title}
       </div>
       {showListItemOption && !isLeaf ? dom : null}
@@ -150,7 +150,7 @@ const CheckboxList: React.FC<{
         columnKey: string;
       },
     ): DataNode[] =>
-      data.map(({ key, dataIndex, children, ...rest }) => {
+      data.map(({ key, dataIndex: _dataIndex, children, ...rest }) => {
         const columnKey = genColumnKey(
           key,
           [parentConfig?.columnKey, rest.index].filter(Boolean).join('-'),
@@ -302,7 +302,7 @@ const CheckboxList: React.FC<{
       height={listHeight}
       treeData={treeDataConfig.list?.map(
         ({
-          disabled /* 不透传 disabled，使子节点禁用时也可以拖动调整顺序 */,
+          disabled: _disabled /* 不透传 disabled，使子节点禁用时也可以拖动调整顺序 */,
           ...config
         }) => config,
       )}
@@ -311,7 +311,7 @@ const CheckboxList: React.FC<{
   return (
     <>
       {showTitle && (
-        <span className={`${className}-list-title ${hashId}`.trim()}>
+        <span className={clsx(`${className}-list-title`, hashId)}>
           {listTitle}
         </span>
       )}
@@ -418,7 +418,6 @@ function ColumnSetting<T>(props: ColumnSettingProps<T>) {
         JSON.stringify(counter.propsRef.current?.columnsState?.value || {}),
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -485,7 +484,7 @@ function ColumnSetting<T>(props: ColumnSettingProps<T>) {
     <Popover
       arrow={false}
       title={
-        <div className={`${className}-title ${hashId}`.trim()}>
+        <div className={clsx(`${className}-title`, hashId)}>
           {props.checkable === false ? (
             <div />
           ) : (
@@ -505,7 +504,7 @@ function ColumnSetting<T>(props: ColumnSettingProps<T>) {
           {checkedReset ? (
             <a
               onClick={clearClick}
-              className={`${className}-action-rest-button ${hashId}`.trim()}
+              className={clsx(`${className}-action-rest-button`, hashId)}
             >
               {intl.getMessage('tableToolBar.reset', '重置')}
             </a>
@@ -518,7 +517,7 @@ function ColumnSetting<T>(props: ColumnSettingProps<T>) {
         </div>
       }
       classNames={{
-        root: `${className}-overlay ${hashId}`.trim(),
+        root: clsx(`${className}-overlay`, hashId),
       }}
       trigger="click"
       placement="bottomRight"

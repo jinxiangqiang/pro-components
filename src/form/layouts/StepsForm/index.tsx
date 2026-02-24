@@ -225,8 +225,8 @@ function StepsForm<T = Record<string, any>>(
   );
 
   const layoutRender = useMemo(() => {
-    return StepsLayoutStrategy[stepsProps?.direction || 'horizontal'];
-  }, [stepsProps?.direction]);
+    return StepsLayoutStrategy[stepsProps?.orientation || 'horizontal'];
+  }, [stepsProps?.orientation]);
 
   const lastStep = useMemo(
     () => step === formArray.length - 1,
@@ -312,22 +312,15 @@ function StepsForm<T = Record<string, any>>(
       }),
     };
 
-    // Convert deprecated direction to orientation
-    const processedStepsProps = stepsProps ? { ...stepsProps } : {};
-    if ('direction' in processedStepsProps) {
-      processedStepsProps.orientation = processedStepsProps.direction;
-      delete processedStepsProps.direction;
-    }
-
     return (
       <div
-        className={`${prefixCls}-steps-container ${hashId}`.trim()}
+        className={clsx(`${prefixCls}-steps-container`, hashId)}
         style={{
           maxWidth: Math.min(formArray.length * 320, 1160),
         }}
       >
         <Steps
-          {...processedStepsProps}
+          {...stepsProps}
           {...itemsProps}
           current={step}
           onChange={undefined}
@@ -498,7 +491,7 @@ function StepsForm<T = Record<string, any>>(
   const formContainer = useMemo(
     () => (
       <div
-        className={`${prefixCls}-container ${hashId}`.trim()}
+        className={clsx(`${prefixCls}-container`, hashId)}
         style={containerStyle}
       >
         {formDom}

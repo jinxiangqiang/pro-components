@@ -24,6 +24,7 @@ const Demo = () => {
       name: string;
       company: string;
     }>
+      name="modal-form-drawer-form-demo"
       title="Create New Form"
       resize={{
         onResize() {
@@ -125,7 +126,7 @@ const Demo = () => {
         name="mangerName"
         disabled
         label="Business Manager"
-        initialValue="张三"
+        initialValue="书琰"
       />
     </DrawerForm>
   );

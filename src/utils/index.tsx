@@ -20,6 +20,7 @@ import {
   dateFormatterMap,
 } from './conversionMomentValue';
 import { dateArrayFormatter } from './dateArrayFormatter';
+import type { ProEllipsis } from './genCopyable';
 import { genCopyable } from './genCopyable';
 import { getFieldPropsOrFormItemProps } from './getFieldPropsOrFormItemProps';
 import { useDebounceFn } from './hooks/useDebounceFn';
@@ -134,6 +135,7 @@ export {
   useStyle,
 };
 export type {
+  ProEllipsis,
   ProFormInstanceType,
   ProRequestData,
   RowEditableConfig,

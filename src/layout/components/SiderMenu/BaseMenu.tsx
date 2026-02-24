@@ -50,7 +50,7 @@ const MenuItemTooltip = (props: {
   }, [props.collapsed]);
 
   if (props.disable) {
-    return props.children as JSX.Element;
+    return props.children as React.JSX.Element;
   }
 
   return (
@@ -264,7 +264,7 @@ class MenuUtil {
           {menuType === 'group' && collapsed ? null : shouldHasIcon &&
             iconDom ? (
             <span
-              className={`${baseClassName}-item-icon ${this.props?.hashId}`.trim()}
+              className={clsx(`${baseClassName}-item-icon`, this.props?.hashId)}
             >
               {iconDom}
             </span>
@@ -342,7 +342,6 @@ class MenuUtil {
       disabled: item.disabled,
       key: item.key! || item.path!,
       onClick: item.onTitleClick,
-      // eslint-disable-next-line react/no-is-mounted
       label: this.getMenuItemPath(item, level, noGroupLevel),
     };
   };
@@ -412,7 +411,7 @@ class MenuUtil {
         })}
       >
         <span
-          className={`${baseClassName}-item-icon ${this.props?.hashId}`.trim()}
+          className={clsx(`${baseClassName}-item-icon`, this.props?.hashId)}
           style={{
             display: defaultIcon === null && !icon ? 'none' : '',
           }}
@@ -449,7 +448,7 @@ class MenuUtil {
           })}
         >
           <span
-            className={`${baseClassName}-item-icon ${this.props?.hashId}`.trim()}
+            className={clsx(`${baseClassName}-item-icon`, this.props?.hashId)}
             style={{
               display: defaultIcon === null && !icon ? 'none' : '',
             }}
@@ -623,7 +622,6 @@ const BaseMenu: React.FC<BaseMenuProps & PrivateSiderMenuProps> = (props) => {
       setOpenKeys(matchMenuKeys);
       setSelectedKeys(matchMenuKeys);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matchMenuKeys.join('-')]);
 
   useEffect(() => {
@@ -668,7 +666,6 @@ const BaseMenu: React.FC<BaseMenuProps & PrivateSiderMenuProps> = (props) => {
 
   const openKeysProps = useMemo(
     () => getOpenKeysProps(openKeys, props),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [openKeys && openKeys.join(','), props.layout, props.collapsed],
   );
   const { wrapSSR, hashId } = useStyle(baseClassName, mode);
@@ -721,8 +718,8 @@ const BaseMenu: React.FC<BaseMenuProps & PrivateSiderMenuProps> = (props) => {
   }
   return wrapSSR(
     <Menu
-      {...openKeysProps}
-      _internalDisableMenuItemTitleTooltip
+      {...(openKeysProps as any)}
+      {...({ tooltip: false } as any)}
       key="Menu"
       mode={mode}
       inlineIndent={16}

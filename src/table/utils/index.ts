@@ -143,7 +143,6 @@ export function useActionType<T>(
     },
     currentTableDataSource: action.dataSource,
   };
-  // eslint-disable-next-line no-param-reassign
   ref.current = userAction;
 }
 

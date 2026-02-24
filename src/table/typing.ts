@@ -1,15 +1,14 @@
-import type { SpinProps, Table, TableProps } from 'antd';
-import type { SizeType } from 'antd/es/config-provider/SizeContext';
-import type { LabelTooltipType } from 'antd/es/form/FormItemLabel';
-import type { NamePath } from 'antd/es/form/interface';
-import type { SearchProps } from 'antd/es/input';
+import type { SpinProps, TableProps } from 'antd';
+import type { SizeType } from 'antd/lib/config-provider/SizeContext';
+import type { NamePath } from 'antd/lib/form/interface';
+import type { SearchProps } from 'antd/lib/input';
 import type {
   ColumnFilterItem,
   ColumnType,
   CompareFn,
   SorterResult,
   SortOrder,
-} from 'antd/es/table/interface';
+} from 'antd/lib/table/interface';
 import type dayjs from 'dayjs';
 import type React from 'react';
 import type { CSSProperties, Key } from 'react';
@@ -21,7 +20,9 @@ import type {
   QueryFilterProps,
 } from '../form';
 import type {
+  LabelTooltipType,
   ProCoreActionType,
+  ProEllipsis,
   ProSchema,
   ProSchemaComponentTypes,
   ProTableEditableFnType,
@@ -118,7 +119,7 @@ export type ProColumnType<T = unknown, ValueType = 'text'> = ProSchema<
     initialValue?: any;
 
     /** @name 是否缩略 */
-    ellipsis?: ColumnType<T>['ellipsis'];
+    ellipsis?: ProEllipsis;
     /** @name 是否拷贝 */
     copyable?: boolean;
 
@@ -155,8 +156,23 @@ export type ProColumnType<T = unknown, ValueType = 'text'> = ProSchema<
     /** @name 可编辑表格是否可编辑 */
     editable?: boolean | ProTableEditableFnType<T>;
 
-    /** @private */
-    listKey?: string;
+    /**
+     * 用于 ProList，指定该列映射到列表项的哪个插槽位置
+     *
+     * @name 列表项插槽
+     * @example listSlot: 'title'
+     * @example listSlot: 'avatar'
+     */
+    listSlot?:
+      | 'title'
+      | 'subTitle'
+      | 'avatar'
+      | 'description'
+      | 'content'
+      | 'actions'
+      | 'aside'
+      | 'type'
+      | (string & {});
 
     /** @name 只读 */
     readonly?: boolean;
@@ -307,11 +323,6 @@ export type ProTableProps<DataSource, U, ValueType = 'text'> = {
    * actionRef.current?.reset();
    */
   actionRef?: React.Ref<ActionType | undefined>;
-
-  /**
-   * @name table的ref
-   */
-  tableRef?: Parameters<typeof Table>[0]['ref'];
 
   /**
    * @name 操作自带的 form

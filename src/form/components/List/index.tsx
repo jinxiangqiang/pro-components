@@ -7,13 +7,12 @@ import {
 import { warning } from '@rc-component/util';
 import type { ColProps } from 'antd';
 import { ConfigProvider, Form } from 'antd';
-import type { LabelTooltipType } from 'antd/es/form/FormItemLabel';
 import type {
   FormListFieldData,
   FormListOperation,
   FormListProps,
-} from 'antd/es/form/FormList';
-import type { NamePath } from 'antd/es/form/interface';
+} from 'antd/lib/form/FormList';
+import type { NamePath } from 'antd/lib/form/interface';
 import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
 import React, {
@@ -24,6 +23,7 @@ import React, {
   useRef,
 } from 'react';
 import { useIntl } from '../../../provider';
+import type { LabelTooltipType } from '../../../utils';
 import { ProFormContext } from '../../../utils';
 import FieldContext from '../../FieldContext';
 import { useGridHelpers } from '../../helpers';
@@ -123,7 +123,6 @@ export type ProFormListProps<T> = Omit<FormListProps, 'children' | 'rules'> &
     wrapperCol?: ColProps;
     className?: string;
     readonly?: boolean;
-    copyRowsTransform?: (row: Record<string, any>) => void;
   } & Pick<ProFormGridConfig, 'colProps' | 'rowProps'>;
 
 function ProFormList<T>(props: ProFormListProps<T>) {
@@ -183,7 +182,6 @@ function ProFormList<T>(props: ProFormListProps<T>) {
     containerClassName,
     containerStyle,
     readonly,
-    copyRowsTransform,
     ...rest
   } = props;
 
@@ -199,7 +197,6 @@ function ProFormList<T>(props: ProFormListProps<T>) {
     return [listContext.name, rest.name].flat(1);
   }, [listContext.name, rest.name]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useImperativeHandle(
     actionRef,
     () =>
@@ -326,7 +323,6 @@ function ProFormList<T>(props: ProFormListProps<T>) {
                     }}
                     containerClassName={containerClassName}
                     containerStyle={containerStyle}
-                    copyRowsTransform={copyRowsTransform}
                   >
                     {children}
                   </ProFormListContainer>

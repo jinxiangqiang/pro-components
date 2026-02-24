@@ -35,7 +35,8 @@ export type GenerateStyle<
   ReturnType = CSSInterpolation,
 > = (token: ComponentToken, ...rest: any[]) => ReturnType;
 
-export const proTheme = antdTheme as typeof antdTheme;
+// 为了兼容 antd 类型，这里使用 any
+export const proTheme = antdTheme as any;
 
 export type UseStyleResult = {
   wrapSSR: (node: React.ReactElement) => React.ReactElement;
@@ -67,6 +68,9 @@ export const resetComponent = (token: ProAliasToken): CSSObject => ({
   fontSize: token.fontSize,
   lineHeight: token.lineHeight,
   listStyle: 'none',
+  '*, *::before, *::after': {
+    boxSizing: 'border-box',
+  },
 });
 
 export const operationUnit = (token: ProAliasToken): CSSObject => ({
@@ -96,7 +100,6 @@ export function useStyle(
   componentName: string,
   styleFn: (token: ProAliasToken) => CSSInterpolation,
 ) {
-  // eslint-disable-next-line prefer-const
   let { token = {} as Record<string, any> as ProAliasToken, hashed } =
     useContext(ProProvider);
 
@@ -116,14 +119,14 @@ export function useStyle(
   // Register styles (side effect only in v2)
   useStyleRegister(
     {
-      theme,
+      theme: theme as any,
       token,
       path: [componentName],
       nonce: csp?.nonce,
       layer: {
         name: 'antd-pro',
       },
-    },
+    } as any,
     () => styleFn(token as ProAliasToken),
   );
 

@@ -22,8 +22,8 @@ const { noteOnce } = warning;
 
 export type CustomizeResizeType = {
   onResize?: () => void;
-  maxWidth?: DrawerProps['width'];
-  minWidth?: DrawerProps['width'];
+  maxWidth?: DrawerProps['size'];
+  minWidth?: DrawerProps['size'];
 };
 
 export type DrawerFormProps<
@@ -48,7 +48,7 @@ export type DrawerFormProps<
     submitTimeout?: number;
 
     /** @name 用于触发抽屉打开的 dom ，只能设置一个*/
-    trigger?: JSX.Element;
+    trigger?: React.JSX.Element;
 
     /** @name 受控的打开关闭 */
     open?: DrawerProps['open'];
@@ -63,7 +63,7 @@ export type DrawerFormProps<
     title?: DrawerProps['title'];
 
     /** @name 抽屉的宽度 */
-    width?: DrawerProps['width'];
+    width?: DrawerProps['size'];
 
     /**
      *
@@ -86,8 +86,7 @@ function DrawerForm<T = Record<string, any>, U = Record<string, any>>({
   ...rest
 }: DrawerFormProps<T, U>) {
   noteOnce(
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    !(rest as any)['footer'] || !drawerProps?.footer,
+    !(rest as any).footer || !drawerProps?.footer,
     'DrawerForm 是一个 ProForm 的特殊布局，如果想自定义按钮，请使用 submit.render 自定义。',
   );
   const resizeInfo: CustomizeResizeType = React.useMemo(() => {
@@ -113,14 +112,13 @@ function DrawerForm<T = Record<string, any>, U = Record<string, any>>({
   const context = useContext(ConfigProvider.ConfigContext);
   const baseClassName = context.getPrefixCls('pro-form-drawer');
   const { wrapSSR, hashId } = useStyle(baseClassName);
-  const getCls = (className: string) =>
-    `${baseClassName}-${className} ${hashId}`;
+  const getCls = (className: string) => `${baseClassName}-${className}`;
 
   const [, forceUpdate] = useState([]);
   const [loading, setLoading] = useState(false);
   const [resizableDrawer, setResizableDrawer] = useState(false);
 
-  const [drawerWidth, setDrawerWidth] = useState<DrawerProps['width']>(
+  const [drawerWidth, setDrawerWidth] = useState<DrawerProps['size']>(
     width ? width : resize ? resizeInfo?.minWidth : 800,
   );
 
@@ -191,8 +189,6 @@ function DrawerForm<T = Record<string, any>, U = Record<string, any>>({
     if (resizableDrawer) {
       setDrawerWidth(resizeInfo?.minWidth);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propsOpen, open, resizableDrawer]);
 
   useImperativeHandle(

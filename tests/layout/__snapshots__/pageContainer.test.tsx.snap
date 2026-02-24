@@ -11,7 +11,7 @@ exports[`PageContainer > ⚡️ support footer 1`] = `
       class="ant-page-header ant-pro-page-container-warp-page-header ant-page-header-ghost"
     >
       <div
-        class="ant-page-header-heading "
+        class="ant-page-header-heading"
       >
         <div
           class="ant-page-header-heading-left"
@@ -54,7 +54,7 @@ exports[`PageContainer > ⚡️ support more loading props 1`] = `
       class="ant-page-header ant-pro-page-container-warp-page-header ant-page-header-ghost"
     >
       <div
-        class="ant-page-header-heading "
+        class="ant-page-header-heading"
       >
         <div
           class="ant-page-header-heading-left"
@@ -80,7 +80,7 @@ exports[`PageContainer > ⚡️ support more loading props 1`] = `
           <div
             aria-busy="true"
             aria-live="polite"
-            class="ant-spin ant-spin-lg ant-spin-spinning ant-spin-show-text css-var-rm"
+            class="ant-spin ant-spin-lg ant-spin-spinning ant-spin-section css-var-rm"
           >
             <span
               class="ant-spin-dot-holder"
@@ -102,6 +102,11 @@ exports[`PageContainer > ⚡️ support more loading props 1`] = `
                 />
               </span>
             </span>
+            <div
+              class="ant-spin-description"
+            >
+              加载中
+            </div>
           </div>
         </div>
       </div>
@@ -119,7 +124,7 @@ exports[`PageContainer > 🌛 PageContainer with custom loading 1`] = `
       class="ant-page-header ant-pro-page-container-warp-page-header ant-page-header-ghost"
     >
       <div
-        class="ant-page-header-heading "
+        class="ant-page-header-heading"
       >
         <div
           class="ant-page-header-heading-left"
@@ -160,7 +165,7 @@ exports[`PageContainer > 🐛 className prop should not be passed to its page he
       class="ant-page-header ant-pro-page-container-warp-page-header ant-page-header-ghost"
     >
       <div
-        class="ant-page-header-heading "
+        class="ant-page-header-heading"
       >
         <div
           class="ant-page-header-heading-left"
@@ -724,7 +729,7 @@ exports[`PageContainer > 🐲 footer should know width 1`] = `
               class="ant-page-header ant-pro-page-container-warp-page-header ant-page-header-ghost"
             >
               <div
-                class="ant-page-header-heading "
+                class="ant-page-header-heading"
               >
                 <div
                   class="ant-page-header-heading-left"
@@ -1040,7 +1045,7 @@ exports[`PageContainer > 💄 base use 1`] = `
       class="ant-page-header ant-pro-page-container-warp-page-header ant-page-header-ghost"
     >
       <div
-        class="ant-page-header-heading "
+        class="ant-page-header-heading"
       >
         <div
           class="ant-page-header-heading-left"
@@ -1127,7 +1132,7 @@ exports[`PageContainer > 🔥 support footer and breadcrumb 1`] = `
         </ol>
       </nav>
       <div
-        class="ant-page-header-heading "
+        class="ant-page-header-heading"
       >
         <div
           class="ant-page-header-heading-left"

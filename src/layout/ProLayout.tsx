@@ -11,7 +11,6 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
@@ -106,8 +105,8 @@ export type ProLayoutProps = GlobalTypes & {
    * */
   logo?:
     | React.ReactNode
-    | JSX.Element
-    | WithFalse<() => React.ReactNode | JSX.Element>;
+    | React.JSX.Element
+    | WithFalse<() => React.ReactNode | React.JSX.Element>;
 
   /**
    * @name 页面切换的时候触发
@@ -535,7 +534,6 @@ const BaseProLayout: React.FC<ProLayoutProps> = (props) => {
 
   useEffect(() => {
     setMenuLoading(isLoading);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
 
   const { cache } = useSWRConfig();
@@ -543,7 +541,6 @@ const BaseProLayout: React.FC<ProLayoutProps> = (props) => {
     return () => {
       if (cache instanceof Map) cache.delete(defaultId);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const menuInfoData = useMemo<{
@@ -763,7 +760,6 @@ const BaseProLayout: React.FC<ProLayoutProps> = (props) => {
   /** 页面切换的时候触发 */
   useEffect(() => {
     props.onPageChange?.(props.location);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, location.pathname?.search]);
 
   const [hasFooterToolbar, setHasFooterToolbar] = useState(false);
@@ -836,7 +832,6 @@ const BaseProLayout: React.FC<ProLayoutProps> = (props) => {
             }}
           >
             <ConfigProvider
-              // @ts-ignore
               theme={{
                 hashed: isNeedOpenHash(),
                 token: {
@@ -885,7 +880,7 @@ const BaseProLayout: React.FC<ProLayoutProps> = (props) => {
             </ConfigProvider>
             <div
               style={genLayoutStyle}
-              className={`${proLayoutClassName}-container ${hashId}`.trim()}
+              className={clsx(`${proLayoutClassName}-container`, hashId)}
             >
               {headerDom}
               <WrapContent

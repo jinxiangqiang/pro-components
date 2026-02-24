@@ -438,8 +438,7 @@ const ProTable = <
         ...params,
       };
 
-      // eslint-disable-next-line no-underscore-dangle
-      delete (actionParams as any)._timestamp;
+      delete actionParams._timestamp;
       const response = await request(
         actionParams as unknown as U,
         proSort,
@@ -500,7 +499,6 @@ const ProTable = <
     document.addEventListener('visibilitychange', visibilitychange);
     return () =>
       document.removeEventListener('visibilitychange', visibilitychange);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /** SelectedRowKeys受控处理selectRows */
@@ -556,7 +554,6 @@ const ProTable = <
         current: 1,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
   // 设置 name 到 store 中，里面用了 ref ，所以不用担心直接 set
@@ -683,14 +680,12 @@ const ProTable = <
       columns: propsColumns,
       context: columnContext,
     }).sort(columnSort(counter.columnsMap ?? {}));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     propsColumns,
     counter?.sortKeyColumns,
     counter?.columnsMap,
     columnEmptyText,
     type,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     editableUtils.editableKeys && editableUtils.editableKeys.join(','),
     proFilter,
     proSort,
@@ -981,33 +976,35 @@ const ProTable = <
     toolbarDom,
   });
 
-  const tableAreaDom =
-    cardProps === false || notNeedCardDom || !!props.name ? (
-      tableContentDom
-    ) : (
-      <ProCard
-        ghost={ghost}
-        variant={isBordered('table', cardBordered) ? 'outlined' : 'borderless'}
-        styles={{
-          body: {
-            ...cardBodyStyle,
-            ...(cardProps && typeof cardProps === 'object'
-              ? cardProps.styles?.body || cardProps.bodyStyle
-              : {}),
-          },
-          ...(cardProps &&
-          typeof cardProps === 'object' &&
-          (cardProps.styles?.header || cardProps.headStyle)
-            ? {
-                header: cardProps.styles?.header || cardProps.headStyle,
-              }
-            : {}),
-        }}
-        {...cardProps}
-      >
-        {tableContentDom}
-      </ProCard>
-    );
+  /** ProTable：有搜索/工具栏/标题时使用卡片包裹；可编辑表格（name）不包裹 */
+  /** ProList：始终使用卡片包裹（除非 cardProps 为 false） */
+  const useCard = useMemo(() => {
+    const useCardForTable =
+      cardProps !== false && !props.name && !notNeedCardDom;
+    const useCardForList = cardProps !== false && type === 'list';
+    return useCardForTable || useCardForList;
+  }, [cardProps, props.name, type, notNeedCardDom]);
+
+  const resolvedCardProps = cardProps === false ? {} : cardProps ?? {};
+
+  const tableAreaDom = useCard ? (
+    <ProCard
+      {...resolvedCardProps}
+      ghost={ghost}
+      variant={isBordered('table', cardBordered) ? 'outlined' : 'borderless'}
+      styles={{
+        body: {
+          ...cardBodyStyle,
+          ...(resolvedCardProps.styles?.body ?? {}),
+        },
+        header: resolvedCardProps.styles?.header,
+      }}
+    >
+      {tableContentDom}
+    </ProCard>
+  ) : (
+    tableContentDom
+  );
 
   const renderTable = () => {
     if (props.tableRender) {
@@ -1084,8 +1081,8 @@ const ProviderTableContainer = <
         columnsState: props.columnsState,
         columns: props.columns,
         onSizeChange: props.onSizeChange,
-        size: props.size,
-        defaultSize: props.defaultSize,
+        size: (props.size as any) || undefined,
+        defaultSize: (props.defaultSize as any) || undefined,
       }}
     >
       <ProConfigProvider

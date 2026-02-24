@@ -6,7 +6,7 @@ import React, { useContext, useRef, useState } from 'react';
 
 import { DEMO_VALUE_ENUM } from '../../mockData';
 
-const valueEnum = {
+const _valueEnum = {
   0: 'close',
   1: 'running',
   2: 'online',
@@ -154,7 +154,7 @@ const Demo = () => {
       <BetaSchemaForm<TableListItem, 'link' | 'tags'>
         initialValues={{
           key: 1,
-          name: 'TradeCode 1',
+          name: '用户认证服务',
           status: [
             {
               value: 1,

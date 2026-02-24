@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   get,
   set as namePathSet,
@@ -519,7 +518,6 @@ function BaseFormComponents<T = Record<string, any>, U = Record<string, any>>(
       isEqual,
       `The initialValues only take effect when the form is initialized, if you need to load asynchronously recommended request, or the initialValues ? <Form/> : null `,
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.initialValues]);
 
   // 初始化给一个默认的 form
@@ -834,7 +832,6 @@ export function BaseForm<T = Record<string, any>, U = Record<string, any>>(
   useEffect(() => {
     if (!syncToUrl) return;
     setUrlSearch(genParams(syncToUrl, getGenParams(), 'set'));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [extraUrlParams, getGenParams, syncToUrl]);
 
   const getPopupContainer = useMemo(() => {
@@ -960,7 +957,7 @@ export function BaseForm<T = Record<string, any>, U = Record<string, any>>(
         >
           <FormListContext.Provider value={{}}>
             <Form
-              onKeyPress={(event) => {
+              onKeyDown={(event) => {
                 if (!isKeyPressSubmit) return;
                 if (event.key === 'Enter') {
                   formRef.current?.submit();
@@ -972,6 +969,7 @@ export function BaseForm<T = Record<string, any>, U = Record<string, any>>(
                 'ref',
                 'labelWidth',
                 'autoFocusFirstInput',
+                'rootClassName',
               ] as any[])}
               ref={(instance) => {
                 if (!formRef.current) return;
@@ -1004,7 +1002,8 @@ export function BaseForm<T = Record<string, any>, U = Record<string, any>>(
                   transformKey(values, !!omitNil),
                 );
               }}
-              className={clsx(props.className, prefixCls, hashId)}
+              className={props.className}
+              rootClassName={clsx(prefixCls, hashId, props.rootClassName)}
               onFinish={onFinish}
             >
               <BaseFormComponents<T, U>

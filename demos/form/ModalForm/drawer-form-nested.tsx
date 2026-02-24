@@ -31,6 +31,7 @@ const Demo = () => {
           name: string;
           company: string;
         }>
+          name="modal-form-drawer-form-nested-demo-4"
           title="新建表单"
           formRef={formRef}
           width={600}
@@ -56,6 +57,7 @@ const Demo = () => {
             name: string;
             company: string;
           }>
+            name="modal-form-drawer-form-nested-demo-3"
             title="新建表单"
             formRef={formRef}
             trigger={
@@ -139,7 +141,7 @@ const Demo = () => {
               name="mangerName"
               disabled
               label="商务经理"
-              initialValue="张三"
+              initialValue="书琰"
             />
           </DrawerForm>
         </DrawerForm>
@@ -148,6 +150,7 @@ const Demo = () => {
           name: string;
           company: string;
         }>
+          name="modal-form-drawer-form-nested-demo-2"
           title="新建表单"
           formRef={formRef}
           trigger={
@@ -172,6 +175,7 @@ const Demo = () => {
             name: string;
             company: string;
           }>
+            name="modal-form-drawer-form-nested-demo-1"
             title="新建表单"
             formRef={formRef}
             trigger={
@@ -255,7 +259,7 @@ const Demo = () => {
               name="mangerName"
               disabled
               label="商务经理"
-              initialValue="张三"
+              initialValue="书琰"
             />
           </ModalForm>
         </ModalForm>

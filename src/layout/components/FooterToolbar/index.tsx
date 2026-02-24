@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { omit } from '@rc-component/util';
 import { ConfigProvider } from 'antd';
 import { clsx } from 'clsx';
@@ -19,7 +18,7 @@ export type FooterToolbarProps = {
   className?: string;
   renderContent?: (
     props: FooterToolbarProps & RouteContextType & { leftWidth?: string },
-    dom: JSX.Element,
+    dom: React.JSX.Element,
   ) => ReactNode;
   prefixCls?: string;
   stylish?: GenerateStyle<FooterToolBarToken>;
@@ -56,7 +55,6 @@ const FooterToolbar: React.FC<FooterToolbarProps> = (props) => {
       return '100%';
     }
     return isMobile ? '100%' : `calc(100% - ${siderWidth}px)`;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value.collapsed, value.hasSiderMenu, value.isMobile, value.siderWidth]);
 
   const containerDom = useMemo(() => {
@@ -71,8 +69,8 @@ const FooterToolbar: React.FC<FooterToolbarProps> = (props) => {
   });
   const dom = (
     <>
-      <div className={`${baseClassName}-left ${hashId}`.trim()}>{extra}</div>
-      <div className={`${baseClassName}-right ${hashId}`.trim()}>
+      <div className={clsx(`${baseClassName}-left`, hashId)}>{extra}</div>
+      <div className={clsx(`${baseClassName}-right`, hashId)}>
         {children}
       </div>
     </>
@@ -87,7 +85,6 @@ const FooterToolbar: React.FC<FooterToolbarProps> = (props) => {
     return () => {
       value?.setHasFooterToolbar?.(false);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const renderDom = (

@@ -9,84 +9,52 @@
       style="display: flex; flex-direction: column; gap: 16px;"
     >
       <div
-        class="ant-form-item pro ant-form-css-var ant-form-item-horizontal"
+        aria-label="segmented control"
+        aria-orientation="horizontal"
+        class="ant-segmented ant-segmented-block pro"
+        role="radiogroup"
+        tabindex="0"
       >
         <div
-          class="ant-row ant-form-item-row pro"
+          class="ant-segmented-group"
         >
-          <div
-            class="ant-col ant-form-item-label pro"
+          <label
+            class="ant-segmented-item ant-segmented-item-selected"
           >
-            <label
-              class=""
-              for="mode"
-              title="模式"
-            >
-              模式
-            </label>
-          </div>
-          <div
-            class="ant-col ant-form-item-control pro"
-          >
+            <input
+              checked=""
+              class="ant-segmented-item-input"
+              name="test-id"
+              type="radio"
+            />
             <div
-              class="ant-form-item-control-input"
+              class="ant-segmented-item-label"
+              title="编辑"
             >
-              <div
-                class="ant-form-item-control-input-content"
-              >
-                <div
-                  aria-label="segmented control"
-                  aria-orientation="horizontal"
-                  class="ant-segmented ant-segmented-block pro"
-                  fieldprops="[object Object]"
-                  id="mode"
-                  role="radiogroup"
-                  tabindex="0"
-                >
-                  <div
-                    class="ant-segmented-group"
-                  >
-                    <label
-                      class="ant-segmented-item ant-segmented-item-selected"
-                    >
-                      <input
-                        checked=""
-                        class="ant-segmented-item-input"
-                        name="test-id"
-                        type="radio"
-                      />
-                      <div
-                        class="ant-segmented-item-label"
-                        title="编辑"
-                      >
-                        编辑
-                      </div>
-                    </label>
-                    <label
-                      class="ant-segmented-item"
-                    >
-                      <input
-                        class="ant-segmented-item-input"
-                        name="test-id"
-                        type="radio"
-                      />
-                      <div
-                        class="ant-segmented-item-label"
-                        title="只读"
-                      >
-                        只读
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              </div>
+              编辑
             </div>
-          </div>
+          </label>
+          <label
+            class="ant-segmented-item"
+          >
+            <input
+              class="ant-segmented-item-input"
+              name="test-id"
+              type="radio"
+            />
+            <div
+              class="ant-segmented-item-label"
+              title="只读"
+            >
+              只读
+            </div>
+          </label>
         </div>
       </div>
       <form
         autocomplete="off"
         class="ant-form ant-form-vertical pro ant-form-css-var ant-pro-form"
+        id="list-tooltip-demo"
       >
         <input
           style="display: none;"
@@ -103,7 +71,7 @@
             >
               <label
                 class=""
-                for="name"
+                for="list-tooltip-demo_name"
                 title="姓名"
               >
                 姓名
@@ -123,7 +91,7 @@
                   >
                     <input
                       class="ant-input"
-                      id="name"
+                      id="list-tooltip-demo_name"
                       placeholder="请输入"
                       type="text"
                       value=""
@@ -224,7 +192,7 @@
                                       >
                                         <label
                                           class=""
-                                          for="labels_0_value"
+                                          for="list-tooltip-demo_labels_0_value"
                                           title="值"
                                         >
                                           值
@@ -244,7 +212,7 @@
                                             >
                                               <input
                                                 class="ant-input"
-                                                id="labels_0_value"
+                                                id="list-tooltip-demo_labels_0_value"
                                                 placeholder="请输入"
                                                 type="text"
                                                 value="333"
@@ -300,7 +268,7 @@
                                       >
                                         <label
                                           class=""
-                                          for="labels_0_label"
+                                          for="list-tooltip-demo_labels_0_label"
                                           title="显示名称"
                                         >
                                           显示名称
@@ -320,7 +288,7 @@
                                             >
                                               <input
                                                 class="ant-input"
-                                                id="labels_0_label"
+                                                id="list-tooltip-demo_labels_0_label"
                                                 placeholder="请输入"
                                                 type="text"
                                                 value="333"
