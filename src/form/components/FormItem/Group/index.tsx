@@ -3,7 +3,7 @@ import { useControlledState } from '@rc-component/util';
 import { ConfigProvider, Space } from 'antd';
 import { clsx } from 'clsx';
 import React, { useCallback, useContext, useMemo } from 'react';
-import { LabelIconTip, useRefFunction } from '../../../../utils';
+import { autoFocusToFirstChild, LabelIconTip, useRefFunction } from '../../../../utils';
 import FieldContext from '../../../FieldContext';
 import { useGridHelpers } from '../../../helpers/grid';
 import { ProFormGroupProps } from '../../../typing';
@@ -128,10 +128,10 @@ const Group: React.FC<ProFormGroupProps> = React.forwardRef(
             return null;
           }
           if (index === 0 && React.isValidElement(element) && autoFocus) {
-            return React.cloneElement(element, {
-              ...(element.props as any),
+            return autoFocusToFirstChild(
+              element,
               autoFocus,
-            });
+            ) as React.ReactElement;
           }
           return element;
         },
@@ -143,6 +143,7 @@ const Group: React.FC<ProFormGroupProps> = React.forwardRef(
         </RowWrapper>,
         hiddenChildren.length > 0 ? (
           <div
+            key="hidden"
             style={{
               display: 'none',
             }}
@@ -165,10 +166,18 @@ const Group: React.FC<ProFormGroupProps> = React.forwardRef(
           {hiddenDoms}
           {(title || tooltip || extra) && (
             <div
+              role="button"
+              tabIndex={0}
               className={clsx(`${className}-title`, hashId)}
               style={titleStyle}
               onClick={() => {
                 setCollapsed(!collapsed);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setCollapsed(!collapsed);
+                }
               }}
             >
               {extra ? (
@@ -181,7 +190,13 @@ const Group: React.FC<ProFormGroupProps> = React.forwardRef(
                   }}
                 >
                   {titleDom}
-                  <span onClick={(e) => e.stopPropagation()}>{extra}</span>
+                  <span
+                    role="presentation"
+                    onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
+                  >
+                    {extra}
+                  </span>
                 </div>
               ) : (
                 titleDom
