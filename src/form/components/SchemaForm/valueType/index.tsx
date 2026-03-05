@@ -19,7 +19,7 @@ const tasks: ProSchemaRenderValueTypeFunction<any, any>[] = [
   formSet,
   divider,
   dependency,
-];
+] as ProSchemaRenderValueTypeFunction<any, any>[];
 
 export const renderValueType = <DataType, ValueType>(
   item: ItemType<DataType, ValueType>,
