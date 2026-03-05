@@ -1,6 +1,6 @@
 {
   "name": "@ant-design/pro-components",
-  "version": "3.100.0-2",
+  "version": "3.100.0-3",
   "type": "module",
   "description": "All-in-one package of @ant-design/pro-components",
   "keywords": [
@@ -127,7 +127,7 @@
     "@vitest/coverage-istanbul": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "animated-scroll-to": "^2.3.2",
-    "antd": "^6.3.1",
+    "antd": "^6.100.6",
     "chalk": "^4.1.2",
     "copy-to-clipboard": "^3.3.3",
     "cross-env": "^10.1.0",
@@ -192,7 +192,7 @@
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
-  "packageManager": "pnpm@9.15.9",
+  "packageManager": "pnpm@10.30.3",
   "publishConfig": {
     "access": "public",
     "registry": "http://10.139.43.221:8081/repository/npm-hosted/"

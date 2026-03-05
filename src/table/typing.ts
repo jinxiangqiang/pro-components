@@ -1,4 +1,4 @@
-import type { SpinProps, TableProps } from 'antd';
+import type { SpinProps, Table, TableProps } from 'antd';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 import type { NamePath } from 'antd/lib/form/interface';
 import type { SearchProps } from 'antd/lib/input';
@@ -323,6 +323,11 @@ export type ProTableProps<DataSource, U, ValueType = 'text'> = {
    * actionRef.current?.reset();
    */
   actionRef?: React.Ref<ActionType | undefined>;
+
+  /**
+   * @name table的ref
+   */
+  tableRef?: Parameters<typeof Table>[0]['ref'];
 
   /**
    * @name 操作自带的 form

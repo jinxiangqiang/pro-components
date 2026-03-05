@@ -123,6 +123,7 @@ export type ProFormListProps<T> = Omit<FormListProps, 'children' | 'rules'> &
     wrapperCol?: ColProps;
     className?: string;
     readonly?: boolean;
+    copyRowsTransform?: (row: Record<string, any>) => void;
   } & Pick<ProFormGridConfig, 'colProps' | 'rowProps'>;
 
 function ProFormList<T>(props: ProFormListProps<T>) {
@@ -182,6 +183,7 @@ function ProFormList<T>(props: ProFormListProps<T>) {
     containerClassName,
     containerStyle,
     readonly,
+    copyRowsTransform,
     ...rest
   } = props;
 
@@ -323,6 +325,7 @@ function ProFormList<T>(props: ProFormListProps<T>) {
                     }}
                     containerClassName={containerClassName}
                     containerStyle={containerStyle}
+                    copyRowsTransform={copyRowsTransform}
                   >
                     {children}
                   </ProFormListContainer>

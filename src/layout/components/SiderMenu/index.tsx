@@ -66,7 +66,9 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (
         onClose={() => {
           onCollapse?.(true);
         }}
-        maskClosable
+        mask={{
+          closable: true,
+        }}
         closable={false}
         getContainer={getContainer || false}
         size={siderWidth}

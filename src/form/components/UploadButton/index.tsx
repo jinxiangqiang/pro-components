@@ -7,11 +7,12 @@ import type {
   UploadProps,
 } from 'antd';
 import { Button, Image, Upload } from 'antd';
-import type { UploadRef } from 'antd/es/upload';
 import React, { useContext, useMemo, useState } from 'react';
 import { EditOrReadOnlyContext } from '../../BaseForm/EditOrReadOnlyContext';
 import type { ProFormFieldItemProps } from '../../typing';
 import warpField from '../FormItem/warpField';
+import type { GetRef } from 'antd';
+type UploadRef = GetRef<typeof Upload>;
 
 type PickUploadProps = Pick<
   UploadProps,

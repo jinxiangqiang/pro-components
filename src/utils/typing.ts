@@ -265,7 +265,7 @@ export type ProFieldValueType = Extract<
  * ComponentsType：表示表单项对应的组件类型，默认为 'text'。
  * ExtraProps：表示表单项组件的额外属性类型，默认为 Record<string, any>。
  * FieldPropsType：表示表单项组件的属性类型，默认为 Record<string, any>。
- * 
+ *
  * 该类型定义了一种联合类型，可以是一个函数类型，也可以是一个对象类型。具体来说：
  * 如果是一个函数类型，它接收两个参数 form 和 config，并返回一个对象类型，该对象类型可以是 FieldPropsType 或 Record<string, any>。
  * 其中，form 是 antd 的 FormInstance 类型，config 是 ProSchema 和其它额外属性的联合类型，并包含了一些表单项相关的信息。
@@ -534,6 +534,13 @@ export type ProCoreActionType<T = {}> = {
   clearSelected?: () => void;
   /** @name p页面的信息都在里面 */
   pageInfo?: PageInfo;
+  /** 当前页面的数据 */
+  currentTableDataSource?: any[];
+  /** 获取选中的值 */
+  selectedInfo?: {
+    selectedRows?: any[];
+    selectedRowKeys?: React.Key[];
+  };
 } & Omit<
   UseEditableUtilType,
   'newLineRecord' | 'editableKeys' | 'actionRender' | 'setEditableRowKeys'
