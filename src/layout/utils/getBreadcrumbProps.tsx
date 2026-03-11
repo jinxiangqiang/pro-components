@@ -2,8 +2,7 @@ import type { BreadcrumbProps } from 'antd';
 import type {
   BreadcrumbItemType,
   ItemType,
-} from 'antd/es/breadcrumb/Breadcrumb';
-import type H from 'history';
+} from 'antd/lib/breadcrumb/Breadcrumb';
 import { match } from 'path-to-regexp';
 import type { ProSettings } from '../defaultSettings';
 import type { ProLayoutProps } from '../ProLayout';
@@ -14,7 +13,7 @@ export type BreadcrumbProLayoutProps = {
   breadcrumbList?: { title: string; href: string }[];
   home?: string;
   location?:
-    | H.Location
+    | Location
     | {
         pathname?: string;
       };
